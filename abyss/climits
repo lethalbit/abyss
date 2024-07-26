@@ -1,0 +1,93 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+#pragma once
+#if !defined(ABYSS_CLIMITS)
+#define ABYSS_CLIMITS
+
+/* XXX(aki): This relies on a GCC builtin  */
+#undef CHAR_BIT
+#define CHAR_BIT __CHAR_BIT__
+
+#if !defined(MB_LEN_MAX)
+#	define MB_LEN_MAX 1
+#endif
+
+/* XXX(aki): This relies on a GCC builtin  */
+#undef INT_MAX
+#undef INT_MIN
+#define INT_MAX __INT_MAX__
+#define INT_MIN (-INT_MAX - 1)
+
+#undef UINT_MAX
+#define UINT_MAX ((INT_MAX << 1U) + 1U)
+
+/* XXX(aki): This relies on a GCC builtin  */
+#undef SHRT_MAX
+#undef SHRT_MIN
+#define SHRT_MAX __SHRT_MAX__
+#define SHRT_MIN (-SHRT_MAX - 1)
+
+#undef USHRT_MAX
+#if SHRT_MAX == INT_MAX
+#	define USHRT_MAX ((SHRT_MAX << 1U) + 1U)
+#else
+#	define USHRT_MAX ((SHRT_MAX << 1) + 1)
+#endif
+
+/* XXX(aki): This relies on a GCC builtin  */
+#undef LONG_MAX
+#undef LONG_MIN
+#define LONG_MAX __LONG_MAX__
+#define LONG_MIN (-LONG_MAX - 1L)
+
+#undef ULONG_MAX
+#define ULONG_MAX ((LONG_MAX << 1UL) + 1UL)
+
+/* XXX(aki): This relies on a GCC builtin  */
+#undef LLONG_MAX
+#undef LLONG_MIN
+#define LLONG_MAX __LLONG_MAX__
+#define LLONG_MIN (-LLONG_MAX - 1LL)
+
+#undef ULLONG_MAX
+#define ULLONG_MAX ((LLONG_MAX << 1ULL) + 1ULL)
+
+/* XXX(aki): This relies on a GCC builtin  */
+#undef SCHAR_MAX
+#undef SCHAR_MIN
+#define SCHAR_MAX __SCHAR_MAX__
+#define SCHAR_MIN (-SCHAR_MAX - 1)
+
+#undef UCHAR_MAX
+#if SCHAR_MAX == INT_MAX
+#	define UCHAR_MAX UINT_MAX
+#else
+#	define UCHAR_MAX ((SCHAR_MAX << 1) + 1)
+#endif
+
+/* XXX(aki): This relies on a GCC builtin  */
+#undef CHAR_MIN
+#undef CHAR_MAX
+#if defined(__CHAR_UNSIGNED__)
+#	if SCHAR_MAX == INT_MAX
+#		define CHAR_MIN 0U
+#	else
+#		define CHAR_MIN 0
+#	endif
+#	define CHAR_MAX UCHAR_MAX
+#else
+#	define CHAR_MIN SCHAR_MIN
+#	define CHAR_MAX SCHAR_MAX
+#endif
+
+/* XXX(aki): This relies on a GCC builtin  */
+#if defined(__LONG_LONG_MAX__)
+#	undef LLONG_MAX
+#	undef LLONG_MIN
+#	undef ULLONG_MAX
+#	define LLONG_MAX __LONG_LONG_MAX__
+#	define LLONG_MIN (-LLONG_MAX - 1)
+#	define ULLONG_MAX ((LLONG_MAX << 1ULL) + 1)
+#endif
+
+#endif /* ABYSS_CLIMITS */
+/* vim: set ft=cpp ts=4 sw=4 noexpandtab: */
