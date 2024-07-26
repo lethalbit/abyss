@@ -1,0 +1,43 @@
+option(
+	'rtti_support',
+	type: 'feature',
+	value: 'disabled',
+	description: 'Enable RTTI based library components (needs host implementation)'
+)
+option(
+	'exception_support',
+	type: 'feature',
+	value: 'disabled',
+	description: 'Enable exception library components (needs host implementation)'
+)
+option(
+	'virtual_support',
+	type: 'feature',
+	value: 'disabled',
+	description: 'Enable the use of virtual classes'
+)
+option(
+	'cxx23_supplemental',
+	type: 'feature',
+	value: 'disabled',
+	description: 'Enable backported C++23 supplemental headers'
+)
+option(
+	'runtime_components',
+	type: 'feature',
+	value: 'disabled',
+	description: 'Enable components that require a runtime implementation'
+)
+option(
+	'extra',
+	type: 'feature',
+	value: 'disabled',
+	description: 'Enable extra, generally useful but not standardized headers'
+)
+
+option(
+	'build_tests',
+	type: 'boolean',
+	value: true,
+	description: 'Build and run library tests (RECOMMENDED)'
+)
