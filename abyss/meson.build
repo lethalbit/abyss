@@ -5,6 +5,7 @@ abyss_headers = files([
 	'climits',
 	'cstddef',
 	'cstdint',
+	'cxxabi.hh',
 ])
 
 abyss_headers_runtime = files([
