@@ -10,7 +10,7 @@ There are also some non-standards compliant enhancements, such as making things 
 
 ### Supported Compilers
 
-> [!INFORMATION]
+> [!IMPORTANT]
 > Due to the nature of the library, there is only a single version of the C++ standard
 > that has been targeted, that being [C++20](https://wg21.link/std20), however some portions
 > of [C++23](https://wg21.link/std23) have been backported where possible, as such a compiler
