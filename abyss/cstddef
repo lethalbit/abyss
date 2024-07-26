@@ -1,0 +1,119 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+#pragma once
+#if !defined(ABYSS_CSTDDEF)
+#define ABYSS_CSTDDEF
+
+#define NULL 0
+
+/* XXX(aki): This relies on a GCC builtin  */
+#undef offsetof
+#define offsetof(type, member) __builtin_offsetof(type, member)
+
+/* XXX(aki): This relies on a GCC builtin  */
+using ptrdiff_t = __PTRDIFF_TYPE__;
+/* XXX(aki): This relies on a GCC builtin  */
+using size_t = __SIZE_TYPE__;
+using nullptr_t = decltype(nullptr);
+
+struct max_align_t {
+	[[gnu::aligned(alignof(long long))]]
+	long long _max_align_ll;
+	[[gnu::aligned(alignof(long double))]]
+	long double _max_align_ld;
+};
+
+namespace std {
+	using ::ptrdiff_t;
+	using ::size_t;
+	using ::nullptr_t;
+	using ::max_align_t;
+
+	enum class byte : unsigned char {};
+
+	/* NOTE(aki): Due to us not being able to drag in <type_traits> we need to do this */
+	/*            It's kinda an implementation of `is_integral` and `remove_cv`        */
+	namespace _impl {
+		template<typename _TInt>
+		struct _byte_op {};
+
+		template<>
+		struct _byte_op<bool> { using _type = byte; };
+		template<>
+		struct _byte_op<char> { using _type = byte; };
+		template<>
+		struct _byte_op<signed char> { using _type = byte; };
+		template<>
+		struct _byte_op<unsigned char> { using _type = byte; };
+		template<>
+		struct _byte_op<short> { using _type = byte; };
+		template<>
+		struct _byte_op<unsigned short> { using _type = byte; };
+		template<>
+		struct _byte_op<int> { using _type = byte; };
+		template<>
+		struct _byte_op<unsigned int> { using _type = byte; };
+		template<>
+		struct _byte_op<long> { using _type = byte; };
+		template<>
+		struct _byte_op<unsigned long> { using _type = byte; };
+		template<>
+		struct _byte_op<long long> { using _type = byte; };
+		template<>
+		struct _byte_op<unsigned long long> { using _type = byte; };
+		/* C/V Decay */
+		template<typename _TInt>
+		struct _byte_op<const _TInt> : _byte_op<_TInt> {};
+		template<typename _TInt>
+		struct _byte_op<volatile _TInt> : _byte_op<_TInt> {};
+		template<typename _TInt>
+		struct _byte_op<const volatile _TInt> : _byte_op<_TInt> {};
+
+		template<typename _TInt>
+		using _byte_op_t = typename _byte_op<_TInt>::_type;
+	}
+
+	/* The C++ Standard doesn't say that the returns from these should be [[nodiscard]], for shame */
+
+	template<typename _TInt>
+	[[nodiscard, gnu::always_inline]]
+	constexpr _impl::_byte_op_t<_TInt>& operator<<=(byte& b, _TInt shift) noexcept {
+		return b = byte((unsigned char)(unsigned(b) << shift));
+	};
+	template<typename _TInt>
+	[[nodiscard, gnu::always_inline]]
+	constexpr _impl::_byte_op_t<_TInt>& operator>>=(byte& b, _TInt shift) noexcept {
+		return b = byte((unsigned char)(unsigned(b) >> shift));
+	}
+	template<typename _TInt>
+	[[nodiscard, gnu::always_inline]]
+	constexpr _impl::_byte_op_t<_TInt> operator<<(byte& b, _TInt shift) noexcept {
+		return byte((unsigned char)(unsigned(b) << shift));
+	};
+	template<typename _TInt>
+	[[nodiscard, gnu::always_inline]]
+	constexpr _impl::_byte_op_t<_TInt> operator>>(byte& b, _TInt shift) noexcept {
+		return byte((unsigned char)(unsigned(b) >> shift));
+	}
+
+	[[nodiscard, gnu::always_inline]]
+	constexpr byte operator|(byte l, byte r) noexcept { return byte((unsigned char)(unsigned(l | r))); }
+	[[nodiscard, gnu::always_inline]]
+	constexpr byte operator&(byte l, byte r) noexcept { return byte((unsigned char)(unsigned(l & r))); }
+	[[nodiscard, gnu::always_inline]]
+	constexpr byte operator^(byte l, byte r) noexcept { return byte((unsigned char)(unsigned(l ^ r))); }
+	[[nodiscard, gnu::always_inline]]
+	constexpr byte operator~(byte b) noexcept { return byte((unsigned char)(unsigned(~b))); }
+	[[nodiscard, gnu::always_inline]]
+	constexpr byte& operator|=(byte& l, byte r) noexcept { return l = l | r; }
+	[[nodiscard, gnu::always_inline]]
+	constexpr byte& operator&=(byte& l, byte r) noexcept { return l = l & r; }
+	[[nodiscard, gnu::always_inline]]
+	constexpr byte& operator^=(byte& l, byte r) noexcept { return l = l ^ r; }
+
+	template<typename _TInt>
+	[[nodiscard, gnu::always_inline]]
+	constexpr _TInt to_integer(_impl::_byte_op_t<_TInt> b) noexcept { return _TInt(b); }
+}
+
+#endif /* ABYSS_CSTDDEF */
+/* vim: set ft=cpp ts=4 sw=4 noexpandtab: */

@@ -3,6 +3,7 @@
 # This will be filled out as they're implemented
 abyss_headers = files([
 	'climits',
+	'cstddef',
 	'cstdint',
 ])
 
