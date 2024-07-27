@@ -1,5 +1,5 @@
 ---
-Checks: 'bugprone-*,clang-analyzer-*,concurrency-*,cppcoreguidelines-*,modernize-*,performance-*,readability-*,portability-*,cert-*,misc-const-correctness,misc-header-include-cycle,misc-misplaced-const,misc-static-assert,misc-uniqueptr-reset-release,misc-redundant-expression,misc-unused-*,-modernize-use-trailing-return-type,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers'
+Checks: 'bugprone-*,clang-analyzer-*,concurrency-*,cppcoreguidelines-*,modernize-*,performance-*,readability-*,portability-*,cert-*,misc-const-correctness,misc-header-include-cycle,misc-misplaced-const,misc-static-assert,misc-uniqueptr-reset-release,misc-redundant-expression,misc-unused-*,-modernize-use-trailing-return-type,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers,-cert-dcl58-cpp'
 WarningsAsErrors: ''
 FormatStyle: 'none'
 CheckOptions:
