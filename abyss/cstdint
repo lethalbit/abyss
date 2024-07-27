@@ -74,52 +74,72 @@ using uintptr_t = __UINTPTR_TYPE__;
 using intmax_t = __INTMAX_TYPE__;
 using uintmax_t = __UINTMAX_TYPE__;
 
+#undef INT8_MAX
+#undef INT8_MIN
 #if defined(__INT8_MAX__)
-#	undef INT8_MAX
-#	undef INT8_MIN
 #	define INT8_MAX __INT8_MAX__
 #	define INT8_MIN (-INT8_MAX - 1)
+#else
+#	define INT8_MAX 0x7F
+#	define INT8_MIN 0x80
 #endif
 
+#undef INT16_MAX
+#undef INT16_MIN
 #if defined(__INT16_MAX__)
-#	undef INT16_MAX
-#	undef INT16_MIN
 #	define INT16_MAX __INT16_MAX__
 #	define INT16_MIN (-INT16_MAX - 1)
+#else
+#	define INT16_MAX 0x7FFF
+#	define INT16_MIN 0x8000
 #endif
 
+#undef INT32_MAX
+#undef INT32_MIN
 #if defined(__INT32_MAX__)
-#	undef INT32_MAX
-#	undef INT32_MIN
 #	define INT32_MAX __INT32_MAX__
 #	define INT32_MIN (-INT32_MAX - 1)
+#else
+#	define INT32_MAX 0x7FFF'FFFF
+#	define INT32_MIN 0x8000'0000
 #endif
 
+#undef INT64_MAX
+#undef INT64_MIN
 #if defined(__INT64_MAX__)
-#	undef INT64_MAX
-#	undef INT64_MIN
 #	define INT64_MAX __INT64_MAX__
 #	define INT64_MIN (-INT64_MAX - 1)
+#else
+#	define INT64_MAX 0x7FFF'FFFF'FFFF'FFFFLL
+#	define INT64_MIN 0x8000'0000'0000'0000LL
 #endif
 
+#undef UINT8_MAX
 #if defined(__UINT8_MAX__)
-#	undef UINT8_MAX
 #	define UINT8_MAX __UINT8_MAX__
+#else
+#	define UINT8_MAX 0xFF
 #endif
 
+#undef UINT16_MAX
 #if defined(__UINT16_MAX__)
-#	undef UINT16_MAX
 #	define UINT16_MAX __UINT16_MAX__
+#else
+#	define UINT16_MAX 0xFFFF
 #endif
 
+#undef UINT32_MAX
 #if defined(__UINT32_MAX__)
-#	undef UINT32_MAX
 #	define UINT32_MAX __UINT32_MAX__
+#else
+#	define UINT32_MAX 0xFFFF'FFFFU
 #endif
 
+#undef UINT64_MAX
 #if defined(__UINT64_MAX__)
-#	undef UINT64_MAX
 #	define UINT64_MAX __UINT64_MAX__
+#else
+#	define UINT64_MAX 0xFFFF'FFFF'FFFF'FFFFUL
 #endif
 
 #undef INT_LEAST8_MAX
@@ -222,6 +242,7 @@ using uintmax_t = __UINTMAX_TYPE__;
 #define WINT_MIN __WINT_MIN__
 
 /* WARN(aki): The fallbacks for the GCC builtins are, once again, just assumptions */
+// NOLINTBEGIN(cppcoreguidelines-macro-usage)
 #undef INT8_C
 #if defined(__INT8_C)
 #	define INT8_C(c) __INT8_C(c)
@@ -284,6 +305,7 @@ using uintmax_t = __UINTMAX_TYPE__;
 #else
 #	define UINTMAX_C(c) c ## UL
 #endif
+// NOLINTEND(cppcoreguidelines-macro-usage)
 
 namespace std {
 	using ::int8_t;
@@ -317,7 +339,6 @@ namespace std {
 	using ::uint_fast64_t;
 
 	using ::intptr_t;
-
 	using ::uintptr_t;
 
 	using ::intmax_t;

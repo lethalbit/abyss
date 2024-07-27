@@ -10,6 +10,7 @@ endif
 
 headers = [
 	'climits',
+	'cstdint',
 ]
 
 foreach hdr : headers
