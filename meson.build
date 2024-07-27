@@ -91,6 +91,9 @@ virtual_enabled    = get_option('virtual_support')
 cxx23_enabled      = get_option('cxx23_supplemental')
 extra_enabled      = get_option('extra')
 
+
+lib_include = include_directories('.')
+
 subdir('abyss')
 
 if build_tests
@@ -111,7 +114,7 @@ if not meson.is_subproject()
 endif
 
 abyss_dep = declare_dependency(
-	include_directories: include_directories('.'),
+	include_directories: lib_include,
 	compile_args: [ feature_defs ],
 	version: meson.project_version()
 )

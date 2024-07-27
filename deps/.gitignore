@@ -1,2 +1,3 @@
 *
 !.gitignore
+!doctest.wrap
