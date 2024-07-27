@@ -1,0 +1,681 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+#pragma once
+#if !defined(ABYSS_TYPE_TRAITS)
+#define ABYSS_TYPE_TRAITS
+
+namespace std {
+	namespace _impl {
+		/* NOTE(aki): The reason this is here is because we can't explicitly include the     */
+		/*            <cstddef> header, nor rely on include order or other implicit includes */
+		/*            meaning we have two of the same type defined.                          */
+		/*                                                                                   */
+		/*            This could be solved by moving it, along with ptrdiff_t, and nullptr_t */
+		/*            into an implementation details header which we could then include,     */
+		/*            which is what GCC does, and would likely not break things that depend  */
+		/*            on the type pollution, but i'm a grump so i'm not doing to do that.    */
+
+		/* XXX(aki): This relies on a GCC builtin  */
+		using size_t = __SIZE_TYPE__;
+	}
+
+	template<typename _T>
+	struct type_identity {
+		using type = _T;
+	};
+	template<typename _T>
+	using type_identity_t = typename type_identity<_T>::type;
+
+	template<typename...>
+	using void_t = void;
+
+	template<typename _T, _T _value>
+	struct integral_constant {
+		static constexpr _T value = _value;
+		using value_type = _T;
+		using type = integral_constant;
+		[[nodiscard]]
+		constexpr operator value_type() const noexcept { return value; }
+		[[nodiscard]]
+		constexpr value_type operator()() const noexcept { return value; }
+	};
+
+	template<bool _BVal>
+	using bool_constant = integral_constant<bool, _BVal>;
+
+	using true_type  = bool_constant<true>;
+	using false_type = bool_constant<false>;
+
+	template<typename _Tl, typename _Tr>
+	struct is_same : false_type {};
+	template<typename _Ty>
+	struct is_same<_Ty, _Ty> : true_type {};
+	template<typename _Tl, typename _Tr>
+	inline constexpr bool is_same_v = is_same<_Tl, _Tr>::value;
+
+	template<bool _BVal, typename _Ty = void>
+	struct enable_if{};
+	template<typename _Ty>
+	struct enable_if<true, _Ty> { using type = _Ty; };
+	template<bool _BVal, typename _Ty = void>
+	using enable_if_t = typename enable_if<_BVal, _Ty>::type;
+
+	template<typename _Ty>
+	struct remove_cv { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_cv<const _Ty> { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_cv<volatile _Ty> { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_cv<const volatile _Ty> { using type = _Ty; };
+	template<typename _Ty>
+	using remove_cv_t = typename remove_cv<_Ty>::type;
+
+	template<typename _Ty>
+	struct remove_const { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_const<const _Ty> { using type = _Ty; };
+	template<typename _Ty>
+	using remove_const_t = typename remove_const<_Ty>::type;
+
+	template<typename _Ty>
+	struct remove_volatile { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_volatile<volatile _Ty> { using type = _Ty; };
+	template<typename _Ty>
+	using remove_volatile_t = typename remove_volatile<_Ty>::type;
+
+	template<typename _Ty>
+	struct add_cv { using type = const volatile _Ty; };
+	template<typename _Ty>
+	using add_cv_t = typename add_cv<_Ty>::type;
+
+	template<typename _Ty>
+	struct add_const { using type = const _Ty; };
+	template<typename _Ty>
+	using add_const_t = typename add_const<_Ty>::type;
+
+	template<typename _Ty>
+	struct add_volatile { using type = volatile _Ty; };
+	template<typename _Ty>
+	using add_volatile_t = typename add_volatile<_Ty>::type;
+
+	template<typename _Ty>
+	struct remove_reference { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_reference<_Ty&> { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_reference<_Ty&&> { using type = _Ty; };
+	template<typename _Ty>
+	using remove_reference_t = typename remove_reference<_Ty>::type;
+
+	namespace _impl {
+		template<typename _Ty>
+		auto _try_add_lvalue_reference(int) -> type_identity<_Ty&>;
+		template<typename _Ty>
+		auto _try_add_lvalue_reference(...) -> type_identity<_Ty>;
+
+		template<typename _Ty>
+		auto _try_add_rvalue_reference(int) -> type_identity<_Ty&&>;
+		template<typename _Ty>
+		auto _try_add_rvalue_reference(...) -> type_identity<_Ty>;
+	}
+
+	template<typename _Ty>
+	struct add_lvalue_reference : decltype(_impl::_try_add_lvalue_reference<_Ty>(0)) {};
+	template<typename _Ty>
+	using add_lvalue_reference_t = typename add_lvalue_reference<_Ty>::type;
+
+	template<typename _Ty>
+	struct add_rvalue_reference : decltype(_impl::_try_add_rvalue_reference<_Ty>(0)) {};
+	template<typename _Ty>
+	using add_rvalue_reference_t = typename add_rvalue_reference<_Ty>::type;
+
+
+	template<typename _Ty>
+	struct remove_cvref : type_identity<remove_reference_t<remove_cv_t<_Ty>>> {};
+
+	template<typename _Ty>
+	struct remove_pointer { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_pointer<_Ty*> { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_pointer<_Ty* const> { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_pointer<_Ty* volatile> { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_pointer<_Ty* const volatile> { using type = _Ty; };
+	template<typename _Ty>
+	using remove_pointer_t = typename remove_pointer<_Ty>::type;
+
+	namespace _impl {
+		template<typename _Ty>
+		auto _try_add_pointer(int) -> type_identity<remove_reference_t<_Ty>*>;
+		template<typename _Ty>
+		auto _try_add_pointer(...) -> type_identity<_Ty>;
+	};
+
+	template<typename _Ty>
+	struct add_pointer: decltype(_impl::_try_add_pointer<_Ty>(0)) {};
+	template<typename _Ty>
+	using add_pointer_t = typename add_pointer<_Ty>::type;
+
+
+	template<typename _Ty>
+	struct is_void : is_same<void, remove_cv_t<_Ty>> {};
+	template<typename _Ty>
+	inline constexpr bool is_void_v = is_void<_Ty>::value;
+
+	/* NOTE(aki): We use `decltype(nullptr)` here because afaict we can't include <cstddef>  */
+	template<typename _Ty>
+	struct is_null_pointer : is_same<decltype(nullptr), remove_cv_t<_Ty>> {};
+	template<typename _Ty>
+	inline constexpr bool is_null_pointer_v = is_null_pointer<_Ty>::value;
+
+	namespace _impl {
+		template<typename _Ty>
+		struct _try_is_integral : false_type {};
+		template<>
+		struct _try_is_integral<bool> : true_type {};
+		template<>
+		struct _try_is_integral<char> : true_type {};
+		template<>
+		struct _try_is_integral<signed char> : true_type {};
+		template<>
+		struct _try_is_integral<unsigned char> : true_type {};
+		template<>
+		struct _try_is_integral<short> : true_type {};
+		template<>
+		struct _try_is_integral<unsigned short> : true_type {};
+		template<>
+		struct _try_is_integral<int> : true_type {};
+		template<>
+		struct _try_is_integral<unsigned int> : true_type {};
+		template<>
+		struct _try_is_integral<long> : true_type {};
+		template<>
+		struct _try_is_integral<unsigned long> : true_type {};
+		template<>
+		struct _try_is_integral<long long> : true_type {};
+		template<>
+		struct _try_is_integral<unsigned long long> : true_type {};
+	}
+
+	template<typename _Ty>
+	struct is_integral : bool_constant<_impl::_try_is_integral<remove_cv_t<_Ty>>::value> {};
+	template<typename _Ty>
+	inline constexpr bool is_integral_v = is_integral<_Ty>::value;
+
+	/* BUG(aki): This doesn't cover the fixed-size float types (float{16,32,64,128}_t) yet */
+	namespace _impl {
+		template<typename _Ty>
+		struct _try_is_floating_point : false_type {};
+		template<>
+		struct _try_is_floating_point<float> : true_type {};
+		template<>
+		struct _try_is_floating_point<double> : true_type {};
+		template<>
+		struct _try_is_floating_point<long double> : true_type {};
+	}
+	template<typename _Ty>
+	struct is_floating_point : bool_constant<_impl::_try_is_floating_point<remove_cv_t<_Ty>>::value> {};
+	template<typename _Ty>
+	inline constexpr bool is_floating_point_v = is_floating_point<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_array : false_type {};
+	template<typename _Ty>
+	struct is_array<_Ty[]> : true_type {};
+	template<typename _Ty, _impl::size_t N>
+	struct is_array<_Ty[N]> : true_type {};
+	template<typename _Ty>
+	inline constexpr bool is_array_v = is_array<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_enum : bool_constant<__is_enum(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_enum_v = is_enum<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_union : bool_constant<__is_union(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_union_v = is_union<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_class : bool_constant<__is_class(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_class_v = is_class<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_function : bool_constant<__is_function(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_function_v = is_function<_Ty>::value;
+
+	namespace _impl {
+		template<typename _Ty>
+		struct _try_is_pointer : false_type {};
+		template<typename _Ty>
+		struct _try_is_pointer<_Ty*> : true_type {};
+	}
+	template<typename _Ty>
+	struct is_pointer : bool_constant<_impl::_try_is_pointer<remove_cv_t<_Ty>>::value> {};
+	template<typename _Ty>
+	inline constexpr bool is_pointer_v = is_pointer<_Ty>::value;
+
+	namespace _impl {
+		template<typename _Ty>
+		struct _try_is_lvalue_reference : false_type {};
+		template<typename _Ty>
+		struct _try_is_lvalue_reference<_Ty&> : true_type {};
+	}
+	template<typename _Ty>
+	struct is_lvalue_reference : bool_constant<_impl::_try_is_lvalue_reference<remove_cv_t<_Ty>>::value> {};
+	template<typename _Ty>
+	inline constexpr bool is_lvalue_reference_v = is_lvalue_reference<_Ty>::value;
+
+	namespace _impl {
+		template<typename _Ty>
+		struct _try_is_rvalue_reference : false_type {};
+		template<typename _Ty>
+		struct _try_is_rvalue_reference<_Ty&&> : true_type {};
+	}
+	template<typename _Ty>
+	struct is_rvalue_reference : bool_constant<_impl::_try_is_rvalue_reference<remove_cv_t<_Ty>>::value> {};
+	template<typename _Ty>
+	inline constexpr bool is_rvalue_reference_v = is_rvalue_reference<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_arithmetic : bool_constant<is_integral_v<_Ty> || is_floating_point_v<_Ty>> {};
+	template<typename _Ty>
+	inline constexpr bool is_arithmetic_v = is_arithmetic<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_fundamental : bool_constant<is_arithmetic_v<_Ty> || is_void_v<_Ty> || is_null_pointer_v<_Ty>> {};
+	template<typename _Ty>
+	inline constexpr bool is_fundamental_v = is_fundamental<_Ty>::value;
+
+	namespace _impl {
+		template<typename _Ty>
+		struct _try_is_member_pointer : false_type {};
+		template<typename _Ty, typename _Cl>
+		struct _try_is_member_pointer<_Ty _Cl::*> : true_type {};
+	}
+	template<typename _Ty>
+	struct is_member_pointer : bool_constant<_impl::_try_is_member_pointer<remove_cv_t<_Ty>>::value> {};
+	template<typename _Ty>
+	inline constexpr bool is_member_pointer_v = is_member_pointer<_Ty>::value;
+
+	namespace _impl {
+		template<typename _Ty>
+		struct _try_is_member_function_pointer : false_type {};
+		template<typename _Ty, typename _Cl>
+		struct _try_is_member_function_pointer<_Ty _Cl::*> : is_function<_Ty> {};
+	}
+	template<typename _Ty>
+	struct is_member_function_pointer : bool_constant<_impl::_try_is_member_function_pointer<remove_cv_t<_Ty>>::value> {};
+	template<typename _Ty>
+	inline constexpr bool is_member_function_pointer_v = is_member_function_pointer<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_member_object_pointer : bool_constant<is_member_pointer_v<_Ty> && !is_member_function_pointer_v<_Ty>> {};
+	template<typename _Ty>
+	inline constexpr bool is_member_object_pointer_v = is_member_object_pointer<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_scalar : bool_constant<
+		is_arithmetic_v<_Ty> || is_enum_v<_Ty> || is_pointer_v<_Ty> || is_null_pointer_v<_Ty> || is_member_pointer_v<_Ty>
+	> {};
+	template<typename _Ty>
+	inline constexpr bool is_scalar_v = is_scalar<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_object : bool_constant<is_scalar_v<_Ty> || is_array_v<_Ty> || is_union_v<_Ty> || is_class_v<_Ty>> {};
+	template<typename _Ty>
+	inline constexpr bool is_object_v = is_object<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_compound : bool_constant<!is_fundamental_v<_Ty>> {};
+	template<typename _Ty>
+	inline constexpr bool is_compound_v = is_compound<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_reference : bool_constant<is_lvalue_reference_v<_Ty> || is_rvalue_reference_v<_Ty>> {};
+	template<typename _Ty>
+	inline constexpr bool is_reference_v = is_reference<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_const : false_type {};
+	template<typename _Ty>
+	struct is_const<const _Ty> : true_type {};
+	template<typename _Ty>
+	inline constexpr bool is_const_v = is_const<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_volatile : false_type {};
+	template<typename _Ty>
+	struct is_volatile<volatile _Ty> : true_type {};
+	template<typename _Ty>
+	inline constexpr bool is_volatile_v = is_volatile<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_trivial : bool_constant<__is_trivial(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_trivial_v = is_trivial<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_trivially_copyable : bool_constant<__is_trivially_copyable(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_trivially_copyable_v = is_trivially_copyable<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_standard_layout : bool_constant<__is_standard_layout(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_standard_layout_v = is_standard_layout<_Ty>::value;
+
+	/* XXX(aki): `is_pod` is deprecated, and also relies on a GCC builtin */
+	template<typename _Ty>
+	struct is_pod : bool_constant<is_trivial_v<_Ty> && is_standard_layout_v<_Ty>> {};
+	template<typename _Ty>
+	inline constexpr bool is_pod_v = is_pod<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_literal_type : bool_constant<__is_literal_type(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_literal_type_v = is_literal_type<_Ty>::value;
+
+	/* TODO(aki): has_unique_object_representations */
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_empty : bool_constant<__is_empty(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_empty_v = is_empty<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_polymorphic : bool_constant<__is_polymorphic(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_polymorphic_v = is_polymorphic<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_abstract : bool_constant<__is_abstract(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_abstract_v = is_abstract<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_final : bool_constant<__is_final(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_final_v = is_final<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_aggregate : bool_constant<__is_aggregate(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_aggregate_v = is_aggregate<_Ty>::value;
+
+	namespace _impl {
+		template<typename _Ty, bool = is_arithmetic_v<_Ty>>
+		struct _try_is_signed : bool_constant<(_Ty(-1) < _Ty(0))> {};
+		template<typename _Ty>
+		struct _try_is_signed<_Ty, false> : false_type {};
+	}
+	template<typename _Ty>
+	struct is_signed : _impl::_try_is_signed<_Ty>::type {};
+	template<typename _Ty>
+	inline constexpr bool is_signed_v = is_signed<_Ty>::value;
+
+	namespace _impl {
+		template<typename _Ty, bool = is_arithmetic_v<_Ty>>
+		struct _try_is_unsigned : bool_constant<(_Ty(0) < _Ty(-1))> {};
+		template<typename _Ty>
+		struct _try_is_unsigned<_Ty, false> : false_type {};
+	}
+	template<typename _Ty>
+	struct is_unsigned : _impl::_try_is_unsigned<_Ty>::type {};
+	template<typename _Ty>
+	inline constexpr bool is_unsigned_v = is_unsigned<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_bounded_array : false_type {};
+	template<typename _Ty, _impl::size_t N>
+	struct is_bounded_array<_Ty[N]> : true_type {};
+	template<typename _Ty>
+	inline constexpr bool is_bounded_array_v = is_bounded_array<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_unbounded_array : false_type {};
+	template<typename _Ty>
+	struct is_unbounded_array<_Ty[]> : true_type {};
+	template<typename _Ty>
+	inline constexpr bool is_unbounded_array_v = is_unbounded_array<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_scoped_enum : bool_constant<__is_scoped_enum(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_scoped_enum_v = is_scoped_enum<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_constructible : bool_constant<__is_constructible(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_constructible_v = is_constructible<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_nothrow_constructible : bool_constant<__is_nothrow_constructible(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_nothrow_constructible_v = is_nothrow_constructible<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct is_trivially_constructible : bool_constant<__is_trivially_constructible(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool is_trivially_constructible_v = is_trivially_constructible<_Ty>::value;
+
+	/* TODO(aki): is_{,trivially_,nothrow_}default_constructible */
+	/* TODO(aki): is_{,trivially_,nothrow_}copy_constructible */
+	/* TODO(aki): is_{,trivially_,nothrow_}move_constructible */
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty, typename _Uy>
+	struct is_assignable : bool_constant<__is_assignable(_Ty, _Uy)> {};
+	template<typename _Ty, typename _Uy>
+	inline constexpr bool is_assignable_v = is_assignable<_Ty, _Uy>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty, typename _Uy>
+	struct is_nothrow_assignable : bool_constant<__is_nothrow_assignable(_Ty, _Uy)> {};
+	template<typename _Ty, typename _Uy>
+	inline constexpr bool is_nothrow_assignable_v = is_nothrow_assignable<_Ty, _Uy>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty, typename _Uy>
+	struct is_trivially_assignable : bool_constant<__is_trivially_assignable(_Ty, _Uy)> {};
+	template<typename _Ty, typename _Uy>
+	inline constexpr bool is_trivially_assignable_v = is_trivially_assignable<_Ty, _Uy>::value;
+
+
+	/* TODO(aki): is_{,trivially_,nothrow_}copy_assignable */
+	/* TODO(aki): is_{,trivially_,nothrow_}move_assignable */
+	/* TODO(aki): is_{,trivially_,nothrow_}destructible */
+
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty>
+	struct has_virtual_destructor : bool_constant<__has_virtual_destructor(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr bool has_virtual_destructor_v = has_virtual_destructor<_Ty>::value;
+
+	/* TODO(aki): is_{,nothrow_}swappable_with */
+	/* TODO(aki): is_{,nothrow_}swappable */
+
+	template<typename _Ty>
+	struct alignment_of : integral_constant<_impl::size_t , alignof(_Ty)> {};
+	template<typename _Ty>
+	inline constexpr _impl::size_t alignment_of_v = alignment_of<_Ty>::value;
+
+	template<typename _Ty>
+	struct rank : integral_constant<_impl::size_t, 0> {};
+	template<typename _Ty>
+	struct rank<_Ty[]> : integral_constant<_impl::size_t, rank<_Ty>::value + 1> {};
+	template<typename _Ty, _impl::size_t N>
+	struct rank<_Ty[N]> : integral_constant<_impl::size_t, rank<_Ty>::value + 1> {};
+	template<typename _Ty>
+	inline constexpr _impl::size_t rank_v = rank<_Ty>::value;
+
+	template<typename _Ty, unsigned N = 0>
+	struct extent : integral_constant<_impl::size_t, 0> {};
+	template<typename _Ty>
+	struct extent<_Ty, 0> : integral_constant<_impl::size_t, 0> {};
+	template<typename _Ty, unsigned N>
+	struct extent<_Ty[], N> : extent<_Ty, N - 1> {};
+	template<typename _Ty, _impl::size_t I>
+	struct extent<_Ty[I], 0> : integral_constant<_impl::size_t, I> {};
+	template<typename _Ty, _impl::size_t I, unsigned N>
+	struct extent<_Ty[I], N> : extent<_Ty, N - 1> {};
+	template<typename _Ty, unsigned N = 0>
+	inline constexpr _impl::size_t extent_v = extent<_Ty, N>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty, typename _Uy>
+	struct is_base_of : bool_constant<__is_base_of(_Ty, _Uy)> {};
+	template<typename _Ty, typename _Uy>
+	inline constexpr bool is_base_of_v = is_base_of<_Ty, _Uy>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty, typename _Uy>
+	struct is_convertible : bool_constant<__is_convertible(_Ty, _Uy)> {};
+	template<typename _Ty, typename _Uy>
+	inline constexpr bool is_convertible_v = is_convertible<_Ty, _Uy>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty, typename _Uy>
+	struct is_nothrow_convertible : bool_constant<__is_nothrow_convertible(_Ty, _Uy)> {};
+	template<typename _Ty, typename _Uy>
+	inline constexpr bool is_nothrow_convertible_v = is_nothrow_convertible<_Ty, _Uy>::value;
+
+
+	/* TODO(aki): is_layout_compatable */
+	/* TODO(aki): is_pointer_interconvertible_base_of */
+	/* TODO(aki): is_{,nothrow_}invocable{,_r} */
+
+
+	/* TODO(aki): make_signed */
+	/* TODO(aki): make_unsigned */
+
+	template<typename _Ty>
+	struct remove_extent { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_extent<_Ty[]> { using type = _Ty; };
+	template<typename _Ty, _impl::size_t N>
+	struct remove_extent<_Ty[N]> { using type = _Ty; };
+	template<typename _Ty>
+	using remove_extent_t = typename remove_extent<_Ty>::type;
+
+	template<typename _Ty>
+	struct remove_all_extents { using type = _Ty; };
+	template<typename _Ty>
+	struct remove_all_extents<_Ty[]> { using type = typename remove_all_extents<_Ty>::type; };
+	template<typename _Ty, _impl::size_t N>
+	struct remove_all_extents<_Ty[N]> { using type = typename remove_all_extents<_Ty>::type; };
+	template<typename _Ty>
+	using remove_all_extents_t = typename remove_all_extents<_Ty>::type;
+
+	/* TODO(aki): This feels wrong, needs testing */
+	namespace _impl {
+		template<size_t _Len>
+		struct _aligned_storage {
+			[[gnu::aligned]]
+			unsigned char _type[_Len];
+		};
+	}
+	template<_impl::size_t Len, _impl::size_t Align = alignof(typename _impl::_aligned_storage<Len>::_type)>
+	struct aligned_storage {
+		struct type { alignas(Align) unsigned char data[Len]; };
+	};
+	template<_impl::size_t Len, _impl::size_t Align = alignof(typename _impl::_aligned_storage<Len>::_type)>
+	using aligned_storage_t = typename aligned_storage<Len, Align>::type;
+
+	/* TODO(aki): aligned_union */
+
+	/* TODO(aki): decay */
+
+	template<bool _Bval, typename _True, typename _False>
+	struct conditional { using type = _True; };
+	template<typename _True, typename _False>
+	struct conditional<false, _True, _False> { using type = _False; };
+	template<bool _Bval, typename _True, typename _False>
+	using conditional_t = typename conditional<_Bval, _True, _False>::type;
+
+	/* TODO(aki): common_type */
+	/* TODO(aki): {,basic_}common_reference */
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty, bool = is_enum_v<_Ty>>
+	struct underlying_type : type_identity<__underlying_type(_Ty)> {};
+	template<typename _Ty>
+	struct underlying_type<_Ty, false> {};
+	template<typename _Ty>
+	using underlying_type_t = typename underlying_type<_Ty>::type;
+
+	/* TODO(aki): result_of */
+	/* TODO(aki): invoke_result */
+	/* TODO(aki): type_identity */
+
+	/* TODO(aki): Needs to be made more robust */
+	template<typename...>
+	struct conjunction : true_type {};
+	template<typename _Ty>
+	struct conjunction<_Ty> : _Ty {};
+	template<typename _Ty, typename... _Tn>
+	struct conjunction<_Ty, _Tn...> : conditional_t<bool(_Ty::value), conjunction<_Tn...>, _Ty> {};
+	template<typename... _Ty>
+	inline constexpr bool conjunction_v = conjunction<_Ty...>::value;
+
+	/* TODO(aki): Needs to be made more robust */
+	template<typename...>
+	struct disjunction : false_type {};
+	template<typename _Ty>
+	struct disjunction<_Ty> : _Ty {};
+	template<typename _Ty, typename... _Tn>
+	struct disjunction<_Ty, _Tn...> : conditional_t<bool(_Ty::value), _Ty, disjunction<_Tn...>> {};
+	template<typename... _Ty>
+	inline constexpr bool disjunction_v = disjunction<_Ty...>::value;
+
+	template<typename _Ty>
+	struct negation : bool_constant<!bool(_Ty::value)> {};
+	template<typename _Ty>
+	inline constexpr bool negation_v = negation<_Ty>::value;
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty, typename _M>
+	constexpr bool is_pointer_interconvertible_with_class(_M _Ty::* _mp) noexcept {
+		return __builtin_is_pointer_interconvertible_with_class(_mp);
+	}
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty1, typename _Ty2, typename _M1, typename _M2>
+	constexpr bool is_corresponding_member(_M1 _Ty1::* _mp1, _M2 _Ty2::* _mp2) noexcept {
+		return __builtin_is_corresponding_member(_mp1, _mp2);
+	}
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	constexpr bool is_constant_evaluated() noexcept {
+		return __builtin_is_constant_evaluated();
+	}
+
+
+}
+
+#endif /* ABYSS_TYPE_TRAITS */
+/* vim: set ft=cpp ts=4 sw=4 noexpandtab: */
