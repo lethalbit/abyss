@@ -69,7 +69,7 @@ extended_warnings = [
 extra_flags = [ ]
 
 add_project_arguments(
-	cxx_native.get_supported_arguments(extended_warnings),
+	cxx.get_supported_arguments(extended_warnings),
 	language: 'cpp'
 )
 
@@ -113,8 +113,5 @@ endif
 abyss_dep = declare_dependency(
 	include_directories: include_directories('.'),
 	compile_args: [ feature_defs ],
-	variables: {
-		'compile_args': [ feature_defs ],
-	},
 	version: meson.project_version()
 )
