@@ -1,4 +1,5 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
+// NOLINTBEGIN(cppcoreguidelines-macro-usage)
 #pragma once
 #if !defined(ABYSS_CLIMITS)
 #define ABYSS_CLIMITS
@@ -97,4 +98,5 @@
 #endif
 
 #endif /* ABYSS_CLIMITS */
+// NOLINTEND(cppcoreguidelines-macro-usage)
 /* vim: set ft=cpp ts=4 sw=4 noexpandtab: */
