@@ -2,8 +2,14 @@ name: 'Build - Linux'
 on:
   push:
     branches: [ 'main' ]
+    paths:
+      - 'abyss/**'
+      - 'tests/**'
   pull_request:
     branches: [ 'main' ]
+    paths:
+      - 'abyss/**'
+      - 'tests/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.job }}-${{ github.ref }}
