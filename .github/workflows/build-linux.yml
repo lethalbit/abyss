@@ -1,0 +1,81 @@
+name: 'Build - Linux'
+on:
+  push:
+    branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.job }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-linux:
+    name: '${{ matrix.os.id }} (${{ matrix.compiler }}, ${{ matrix.cpp_std }})'
+    runs-on: '${{ matrix.os.id }}'
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - { id: ubuntu-22.04, name: jammy }
+        compiler:
+          - 'gcc-12'
+          - 'gcc-13'
+        cpp_std:
+          - 'c++20'
+        include:
+          - os: { id: ubuntu-22.04, name: jammy }
+            compiler: 'gcc-12'
+            cpp_std: 'c++20'
+          - os: { id: ubuntu-22.04, name: jammy }
+            compiler: 'gcc-13'
+            cpp_std: 'c++20'
+    steps:
+      - name: 'Setup Runtime Environment'
+        shell: bash
+        env:
+          WORKSPACE: '${{ github.workspace }}'
+        run: |
+          echo "$HOME/.local/bin:$PATH" > $GITHUB_PATH
+          echo "GITHUB_WORKSPACE=\"`pwd`\"" >> $GITHUB_ENV
+      - name: 'Setup GCC'
+        if: startsWith(matrix.compiler, 'gcc')
+        shell: bash
+        run: |
+          CXX=${CC/#gcc/g++}
+          sudo apt-add-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install $CC $CXX
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
+          echo "GCOV=${CC/#gcc/gcov}" >> $GITHUB_ENV
+        env:
+          CC: '${{ matrix.compiler }}'
+      - name: 'Checkout Source'
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          submodules: true
+      - name: 'Setup build tools'
+        shell: bash
+        run: |
+          sudo python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install --user meson ninja
+        working-directory: '${{ runner.temp }}'
+      - name: 'Tool Versions'
+        shell: bash
+        run: |
+          $CC --version
+          $CXX --version
+          $GCOV --version
+          meson --version
+          ninja --version
+      - name: 'Configure'
+        run: meson build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }}
+      - name: 'Build'
+        run: ninja -C build
+      - name: 'Test'
+        run: ninja -C build test
