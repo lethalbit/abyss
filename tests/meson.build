@@ -20,7 +20,7 @@ foreach hdr : headers
 		executable(
 			'@0@-test'.format(hdr),
 			'@0@.cc'.format(hdr),
-			include_directories: lib_include,
+			include_directories: _lib_include,
 			dependencies: [ doctest ]
 		),
 		is_parallel: true,

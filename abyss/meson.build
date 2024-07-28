@@ -76,3 +76,5 @@ if extra_enabled.allowed()
 		install_headers(abyss_headers_extra, subdir: 'abyss')
 	endif
 endif
+
+stdlib_include = include_directories('.')
