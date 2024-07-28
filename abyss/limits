@@ -59,8 +59,9 @@ namespace std {
 				constexpr auto max{half_signed << 1};
 				constexpr auto sign_corrected{max + 1};
 				return sign_corrected;
+			} else {
+				return static_cast<_Ty>(~_Ty(0U));
 			}
-			return ~_Ty(0);
 		}
 
 		/* Minimum value _Ty can represent */
@@ -68,9 +69,9 @@ namespace std {
 		[[nodiscard, gnu::always_inline]]
 		constexpr _Ty _min() noexcept {
 			if constexpr (_is_signed<_Ty>()) {
-				return -_max<_Ty>();
+				return -_max<_Ty>() - 1;
 			}
-			return _Ty(0);
+			return _Ty(0U);
 		}
 	}
 
@@ -91,7 +92,7 @@ namespace std {
 	/* NOTE(aki): This is just a default def, the actual defs follow as specializations */
 	template<typename _Ty>
 	struct numeric_limits {
-		static constexpr bool is_specialized{false};
+		static constexpr bool is_specializedd{false};
 		static constexpr bool is_signed{false};
 		static constexpr bool is_integer{false};
 		static constexpr bool is_exact{false};
@@ -159,7 +160,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<bool> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{false};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -217,7 +218,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<char> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{_impl::_is_signed<char>()};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -275,7 +276,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<signed char> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{true};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -333,7 +334,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<unsigned char> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{false};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -391,7 +392,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<wchar_t> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{_impl::_is_signed<wchar_t>()};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -451,7 +452,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<char16_t> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{false};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -470,6 +471,7 @@ namespace std {
 		static constexpr int digits{_impl::_digits<char16_t>()};
 		static constexpr int digits10{_impl::_digits10<char16_t>()};
 		static constexpr int max_digits10{0};
+		static constexpr int radix{2};
 		static constexpr int min_exponent{0};
 		static constexpr int max_exponent{0};
 		static constexpr int min_exponent10{0};
@@ -508,7 +510,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<char32_t> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{false};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -566,7 +568,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<short> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{true};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -624,7 +626,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<unsigned short> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{false};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -682,7 +684,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<int> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{true};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -740,7 +742,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<unsigned int> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{false};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -798,7 +800,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<long> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{true};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -856,7 +858,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<unsigned long> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{false};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -914,7 +916,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<long long> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{true};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -972,7 +974,7 @@ namespace std {
 
 	template<>
 	struct numeric_limits<unsigned long long> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{false};
 		static constexpr bool is_integer{true};
 		static constexpr bool is_exact{true};
@@ -1031,7 +1033,7 @@ namespace std {
 	/* XXX(aki): This depends on GCC builtins */
 	template<>
 	struct numeric_limits<float> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{true};
 		static constexpr bool is_integer{false};
 		static constexpr bool is_exact{false};
@@ -1095,7 +1097,7 @@ namespace std {
 	/* XXX(aki): This depends on GCC builtins */
 	template<>
 	struct numeric_limits<double> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{true};
 		static constexpr bool is_integer{false};
 		static constexpr bool is_exact{false};
@@ -1159,7 +1161,7 @@ namespace std {
 	/* XXX(aki): This depends on GCC builtins */
 	template<>
 	struct numeric_limits<long double> {
-		static constexpr bool is_specialize{true};
+		static constexpr bool is_specialized{true};
 		static constexpr bool is_signed{true};
 		static constexpr bool is_integer{false};
 		static constexpr bool is_exact{false};
