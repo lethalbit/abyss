@@ -90,9 +90,16 @@ jobs:
           lfs: false
           submodules: true
       - name: 'Setup build tools'
+        if: matrix.os.name == 'jammy'
         shell: bash
         run: |
           python3 -m pip install --user meson ninja
+        working-directory: '${{ runner.temp }}'
+      - name: 'Setup build tools (24.04)'
+        if: matrix.os.name == 'noble'
+        shell: bash
+        run: |
+          python3 -m pip install --break-system-packages --user meson ninja
         working-directory: '${{ runner.temp }}'
       - name: 'Tool Versions'
         shell: bash
