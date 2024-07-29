@@ -448,7 +448,63 @@ namespace std {
 		static constexpr wchar_t denorm_min() noexcept { return 0; }
 	};
 
-	/* TODO(aki): char8_t */
+	template<>
+	struct numeric_limits<char8_t> {
+		static constexpr bool is_specialized{true};
+		static constexpr bool is_signed{_impl::_is_signed<char8_t>()};
+		static constexpr bool is_integer{true};
+		static constexpr bool is_exact{true};
+		static constexpr bool is_iec559{false};
+		static constexpr bool is_bounded{true};
+		static constexpr bool is_modulo{false};
+
+		static constexpr bool has_infinity{false};
+		static constexpr bool has_quiet_NaN{false};
+		static constexpr bool has_signaling_NaN{false};
+		static constexpr bool has_denorm_loss{false};
+
+		static constexpr float_denorm_style has_denorm{denorm_absent};
+		static constexpr float_round_style round_style{round_toward_zero};
+
+		static constexpr int digits{_impl::_digits<char8_t>()};
+		static constexpr int digits10{_impl::_digits10<char8_t>()};
+		static constexpr int max_digits10{0};
+		static constexpr int radix{2};
+		static constexpr int min_exponent{0};
+		static constexpr int max_exponent{0};
+		static constexpr int min_exponent10{0};
+		static constexpr int max_exponent10{0};
+
+		static constexpr bool traps{true};
+		static constexpr bool tinyness_before{false};
+
+		[[nodiscard]]
+		static constexpr char8_t min() noexcept { return _impl::_min<char8_t>(); }
+
+		[[nodiscard]]
+		static constexpr char8_t lowest() noexcept { return min(); }
+
+		[[nodiscard]]
+		static constexpr char8_t max() noexcept { return _impl::_max<char8_t>(); }
+
+		[[nodiscard]]
+		static constexpr char8_t epsilon() noexcept { return 0; }
+
+		[[nodiscard]]
+		static constexpr char8_t round_error() noexcept { return 0; }
+
+		[[nodiscard]]
+		static constexpr char8_t infinity() noexcept { return 0; }
+
+		[[nodiscard]]
+		static constexpr char8_t quiet_NaN() noexcept { return 0; }
+
+		[[nodiscard]]
+		static constexpr char8_t signaling_NaN() noexcept { return 0; }
+
+		[[nodiscard]]
+		static constexpr char8_t denorm_min() noexcept { return 0; }
+	};
 
 	template<>
 	struct numeric_limits<char16_t> {

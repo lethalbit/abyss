@@ -590,6 +590,42 @@ constexpr bool limits_wchar_t() {
 	return true;
 }
 
+constexpr bool limits_char8_t() {
+	static_assert(is_specialized<char8_t>());
+	static_assert(!is_signed<char8_t>());
+	static_assert(is_integer<char8_t>());
+	static_assert(is_exact<char8_t>());
+	static_assert(!is_iec559<char8_t>());
+	static_assert(is_bounded<char8_t>());
+	static_assert(!is_modulo<char8_t>());
+	static_assert(!has_infinity<char8_t>());
+	static_assert(!has_quiet_NaN<char8_t>());
+	static_assert(!has_signaling_NaN<char8_t>());
+	static_assert(has_denorm<char8_t>() == std::denorm_absent);
+	static_assert(!has_denorm_loss<char8_t>());
+	static_assert(digits<char8_t>() == (sizeof(char8_t) * __CHAR_BIT__));
+	static_assert(digits10<char8_t>() == 0);
+	static_assert(max_digits10<char8_t>() == 0);
+	static_assert(radix<char8_t>() == 2);
+	static_assert(max_exponent<char8_t>() == 0);
+	static_assert(min_exponent<char8_t>() == 0);
+	static_assert(max_exponent10<char8_t>() == 0);
+	static_assert(min_exponent10<char8_t>() == 0);
+	static_assert(traps<char8_t>());
+	static_assert(!tinyness_before<char8_t>());
+	static_assert(min<char8_t>() == char8_t(0));
+	static_assert(lowest<char8_t>() == char8_t(0));
+	static_assert(max<char8_t>() == char8_t(-1));
+	static_assert(epsilon<char8_t>() == 0);
+	static_assert(round_error<char8_t>() == 0);
+	static_assert(infinity<char8_t>() == 0);
+	static_assert(quiet_NaN<char8_t>() == 0);
+	static_assert(signaling_NaN<char8_t>() == 0);
+	static_assert(denorm_min<char8_t>() == 0);
+
+	return true;
+}
+
 constexpr bool limits_char16_t() {
 	static_assert(is_specialized<char16_t>());
 	static_assert(!is_signed<char16_t>());
@@ -1065,6 +1101,7 @@ int main(int argc, char** argv) {
 	static_assert(limits_signed_char());
 	static_assert(limits_unsigned_char());
 	static_assert(limits_wchar_t());
+	static_assert(limits_char8_t());
 	static_assert(limits_char16_t());
 	static_assert(limits_char32_t());
 	static_assert(limits_short());
