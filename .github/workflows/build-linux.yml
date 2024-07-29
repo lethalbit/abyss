@@ -5,11 +5,14 @@ on:
     paths:
       - 'abyss/**'
       - 'tests/**'
+      - '.github/workflows/build-linux.yml'
   pull_request:
     branches: [ 'main' ]
     paths:
       - 'abyss/**'
       - 'tests/**'
+      - '.github/workflows/build-linux.yml'
+
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.job }}-${{ github.ref }}
