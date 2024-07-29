@@ -30,15 +30,13 @@ jobs:
         compiler:
           - 'gcc-12'
           - 'gcc-13'
+          - 'gcc-14'
+          - 'clang-16'
+          - 'clang-17'
+          - 'clang-18'
         cpp_std:
           - 'c++20'
-        include:
-          - os: { id: ubuntu-22.04, name: jammy }
-            compiler: 'gcc-12'
-            cpp_std: 'c++20'
-          - os: { id: ubuntu-22.04, name: jammy }
-            compiler: 'gcc-13'
-            cpp_std: 'c++20'
+          - 'c++23'
     steps:
       - name: 'Setup Runtime Environment'
         shell: bash
@@ -58,6 +56,23 @@ jobs:
           echo "CC=$CC" >> $GITHUB_ENV
           echo "CXX=$CXX" >> $GITHUB_ENV
           echo "GCOV=${CC/#gcc/gcov}" >> $GITHUB_ENV
+        env:
+          CC: '${{ matrix.compiler }}'
+      - name: 'Setup Clang'
+        if: startsWith(matrix.compiler, 'clang')
+        shell: bash
+        run: |
+          wget https://apt.llvm.org/llvm-snapshot.gpg.key
+          sudo apt-key add llvm-snapshot.gpg.key
+          rm llvm-snapshot.gpg.key
+          sudo apt-add-repository "deb https://apt.llvm.org/${{ matrix.os.name }}/ llvm-toolchain-${{ matrix.os.name }}${CC/#clang/} main"
+          sudo apt-get update
+          sudo apt-get install $CC
+          CXX=${CC/#clang/clang++}
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
+          echo "GCOV=${CC/#gcc/gcov}" >> $GITHUB_ENV
+          echo "GCOV=/usr/lib/${CC/#clang/llvm}/bin/llvm-cov gcov" >> $GITHUB_ENV
         env:
           CC: '${{ matrix.compiler }}'
       - name: 'Checkout Source'
