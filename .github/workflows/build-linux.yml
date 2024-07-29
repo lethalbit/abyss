@@ -30,16 +30,19 @@ jobs:
       matrix:
         os:
           - { id: ubuntu-22.04, name: jammy }
+          - { id: ubuntu-24.04, name: noble }
         compiler:
           - 'gcc-12'
           - 'gcc-13'
-          - 'gcc-14'
           - 'clang-16'
           - 'clang-17'
           - 'clang-18'
         cpp_std:
           - 'c++20'
           - 'c++23'
+        include:
+          - os: { id: ubuntu-24.04, name: noble }
+            compiler: 'gcc-14'
     steps:
       - name: 'Setup Runtime Environment'
         shell: bash
@@ -53,7 +56,7 @@ jobs:
         shell: bash
         run: |
           CXX=${CC/#gcc/g++}
-          sudo apt-add-repository ppa:ubuntu-toolchain-r/ppa
+          sudo apt-add-repository ppa:ubuntu-toolchain-r/test
           sudo apt-get update
           sudo apt-get install $CC $CXX
           echo "CC=$CC" >> $GITHUB_ENV
@@ -86,8 +89,8 @@ jobs:
       - name: 'Setup build tools'
         shell: bash
         run: |
-          sudo python3 -m pip install --upgrade pip setuptools wheel
-          python3 -m pip install --user meson ninja
+          sudo python3 -m pip install --break-system-packages --upgrade pip setuptools wheel
+          python3 -m pip install  --break-system-packages --user meson ninja
         working-directory: '${{ runner.temp }}'
       - name: 'Tool Versions'
         shell: bash
