@@ -71,7 +71,8 @@ using details::is_unsigned_v;
 #	error "UINTMAX_C not defined"
 #endif
 
-int main(int argc, char** argv) {
+// NOLINTNEXTLINE(readability-named-parameter)
+int main(int, char**) {
 	/* XXX(aki): These tests assume CHAR_BIT is 8, which is fair but also bad */
 	static_assert(CHAR_BIT == 8);
 

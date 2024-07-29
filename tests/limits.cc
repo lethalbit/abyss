@@ -1094,7 +1094,8 @@ constexpr bool limits_long_double() {
 	return true;
 }
 
-int main(int argc, char** argv) {
+// NOLINTNEXTLINE(readability-named-parameter)
+int main(int, char**) {
 
 	static_assert(limits_bool());
 	static_assert(limits_char());

@@ -98,6 +98,7 @@ static_assert(UCHAR_MAX > CHAR_MAX);
 #	error "CHAR_BIT not defined"
 #endif
 
-int main(int argc, char** argv) {
+// NOLINTNEXTLINE(readability-named-parameter)
+int main(int, char**) {
 	return 0;
 }
