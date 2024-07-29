@@ -8,11 +8,11 @@ int main(int, char**) {
 	constexpr auto loc{std::source_location::current()};
 
 	static_assert(loc.line() == 8);
-#if defined(__GNUG__)
-	static_assert(loc.column() == 50);
-#else
+#if defined(__clang__)
 	/* Clang defines it from the identifier assignment, not the invocation point */
-	static_assert(loc.column() == 20);
+	static_assert(loc.column() == 21);
+#elif defined(__GNUG__)
+	static_assert(loc.column() == 50);
 #endif
 	/* There should be more tests, but  */
 
