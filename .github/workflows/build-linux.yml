@@ -53,7 +53,7 @@ jobs:
         shell: bash
         run: |
           CXX=${CC/#gcc/g++}
-          sudo apt-add-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-add-repository ppa:ubuntu-toolchain-r/ppa
           sudo apt-get update
           sudo apt-get install $CC $CXX
           echo "CC=$CC" >> $GITHUB_ENV
