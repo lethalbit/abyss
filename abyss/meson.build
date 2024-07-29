@@ -8,6 +8,7 @@ abyss_headers = files([
 	'cstdint',
 	'cxxabi.hh',
 	'limits',
+	'source_location',
 	'type_traits',
 ])
 

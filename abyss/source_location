@@ -1,0 +1,63 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+#pragma once
+#if !defined(ABYSS_SOURCE_LOCATION)
+#define ABYSS_SOURCE_LOCATION
+
+namespace std {
+	struct source_location {
+	private:
+		using line_col_t = __UINT_LEAST32_TYPE__;
+		/* XXX(aki): this is just to make `__builtin_source_location` happy, we don't use it */
+		struct __impl {
+			const char* _M_file_name;
+			const char* _M_function_name;
+			line_col_t _M_line;
+			line_col_t _M_column;
+		};
+		using builtin_ret_t = decltype(__builtin_source_location());
+
+		const char* _file_name{};
+		const char* _function_name{};
+		line_col_t _line{};
+		line_col_t _col{};
+
+	public:
+		[[nodiscard]]
+		static consteval source_location current(builtin_ret_t _loc = __builtin_source_location()) noexcept {
+			source_location ret{};
+			if (_loc != nullptr) {
+				/* I'm not happy about this, but the built-in dictates how it's done */
+				const auto loc_info{static_cast<const __impl*>(_loc)};
+				ret._file_name = loc_info->_M_file_name;
+				ret._function_name = loc_info->_M_function_name;
+				ret._line = loc_info->_M_line;
+				ret._col = loc_info->_M_column;
+			}
+			return ret;
+		}
+
+		constexpr source_location() noexcept = default;
+
+		[[nodiscard]]
+		constexpr line_col_t line() const noexcept { return _line; }
+		[[nodiscard]]
+		constexpr line_col_t column() const noexcept { return _col; }
+		[[nodiscard]]
+		constexpr const char* file_name() const noexcept {
+			if (_file_name != nullptr) {
+				return _file_name;
+			}
+			return "";
+		}
+		[[nodiscard]]
+		constexpr const char* function_name() const noexcept {
+			if (_function_name != nullptr) {
+				return _function_name;
+			}
+			return "";
+		}
+	};
+}
+
+#endif /* ABYSS_SOURCE_LOCATION */
+/* vim: set ft=cpp ts=4 sw=4 noexpandtab: */

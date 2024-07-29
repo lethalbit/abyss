@@ -12,6 +12,7 @@ headers = [
 	'climits',
 	'cstdint',
 	'limits',
+	'source_location',
 ]
 
 foreach hdr : headers
