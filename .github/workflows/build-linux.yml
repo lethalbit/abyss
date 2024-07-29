@@ -43,6 +43,10 @@ jobs:
         include:
           - os: { id: ubuntu-24.04, name: noble }
             compiler: 'gcc-14'
+            cpp_std: 'c++20'
+          - os: { id: ubuntu-24.04, name: noble }
+            compiler: 'gcc-14'
+            cpp_std: 'c++23'
     steps:
       - name: 'Setup Runtime Environment'
         shell: bash
@@ -89,8 +93,7 @@ jobs:
       - name: 'Setup build tools'
         shell: bash
         run: |
-          sudo python3 -m pip install --break-system-packages --upgrade pip setuptools wheel
-          python3 -m pip install  --break-system-packages --user meson ninja
+          python3 -m pip install --user meson ninja
         working-directory: '${{ runner.temp }}'
       - name: 'Tool Versions'
         shell: bash
