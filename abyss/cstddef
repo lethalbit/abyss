@@ -3,16 +3,29 @@
 #if !defined(ABYSS_CSTDDEF)
 #define ABYSS_CSTDDEF
 
-#define NULL 0
+#undef NULL
+/* Before you complain about this, see [support.types.nullptr] https://eel.is/c++draft/support.types.nullptr#2 */
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+#define NULL nullptr
 
 /* XXX(aki): This relies on a GCC builtin  */
 #undef offsetof
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define offsetof(type, member) __builtin_offsetof(type, member)
 
 /* XXX(aki): This relies on a GCC builtin  */
+#if defined(__PTRDIFF_TYPE__)
 using ptrdiff_t = __PTRDIFF_TYPE__;
+#else
+using ptrdiff_t = decltype(static_cast<long*>(nullptr) - static_cast<long*>(nullptr));
+#endif
+
 /* XXX(aki): This relies on a GCC builtin  */
+#if defined(__SIZE_TYPE__)
 using size_t = __SIZE_TYPE__;
+#else
+using size_t = decltype(sizeof(0ULL));
+#endif
 using nullptr_t = decltype(nullptr);
 
 struct max_align_t {
@@ -76,43 +89,43 @@ namespace std {
 
 	template<typename _TInt>
 	[[nodiscard, gnu::always_inline]]
-	constexpr _impl::_byte_op_t<_TInt>& operator<<=(byte& b, _TInt shift) noexcept {
-		return b = byte((unsigned char)(unsigned(b) << shift));
+	constexpr _impl::_byte_op_t<_TInt>& operator<<=(byte& byt, _TInt shift) noexcept {
+		return byt = byte((unsigned char)(unsigned(byt) << shift));
 	};
 	template<typename _TInt>
 	[[nodiscard, gnu::always_inline]]
-	constexpr _impl::_byte_op_t<_TInt>& operator>>=(byte& b, _TInt shift) noexcept {
-		return b = byte((unsigned char)(unsigned(b) >> shift));
+	constexpr _impl::_byte_op_t<_TInt>& operator>>=(byte& byt, _TInt shift) noexcept {
+		return byt = byte((unsigned char)(unsigned(byt) >> shift));
 	}
 	template<typename _TInt>
 	[[nodiscard, gnu::always_inline]]
-	constexpr _impl::_byte_op_t<_TInt> operator<<(byte& b, _TInt shift) noexcept {
-		return byte((unsigned char)(unsigned(b) << shift));
+	constexpr _impl::_byte_op_t<_TInt> operator<<(byte& byt, _TInt shift) noexcept {
+		return byte((unsigned char)(unsigned(byt) << shift));
 	};
 	template<typename _TInt>
 	[[nodiscard, gnu::always_inline]]
-	constexpr _impl::_byte_op_t<_TInt> operator>>(byte& b, _TInt shift) noexcept {
-		return byte((unsigned char)(unsigned(b) >> shift));
+	constexpr _impl::_byte_op_t<_TInt> operator>>(byte& byt, _TInt shift) noexcept {
+		return byte((unsigned char)(unsigned(byt) >> shift));
 	}
 
 	[[nodiscard, gnu::always_inline]]
-	constexpr byte operator|(byte l, byte r) noexcept { return byte((unsigned char)(unsigned(l | r))); }
+	constexpr byte operator|(byte left, byte right) noexcept { return byte((unsigned char)(unsigned(left) | unsigned(right))); }
 	[[nodiscard, gnu::always_inline]]
-	constexpr byte operator&(byte l, byte r) noexcept { return byte((unsigned char)(unsigned(l & r))); }
+	constexpr byte operator&(byte left, byte right) noexcept { return byte((unsigned char)(unsigned(left) & unsigned(right))); }
 	[[nodiscard, gnu::always_inline]]
-	constexpr byte operator^(byte l, byte r) noexcept { return byte((unsigned char)(unsigned(l ^ r))); }
+	constexpr byte operator^(byte left, byte right) noexcept { return byte((unsigned char)(unsigned(left) ^ unsigned(right))); }
 	[[nodiscard, gnu::always_inline]]
-	constexpr byte operator~(byte b) noexcept { return byte((unsigned char)(unsigned(~b))); }
+	constexpr byte operator~(byte byt) noexcept { return byte((unsigned char)(~unsigned(byt))); }
 	[[nodiscard, gnu::always_inline]]
-	constexpr byte& operator|=(byte& l, byte r) noexcept { return l = l | r; }
+	constexpr byte& operator|=(byte& left, byte right) noexcept { return left = left | right; }
 	[[nodiscard, gnu::always_inline]]
-	constexpr byte& operator&=(byte& l, byte r) noexcept { return l = l & r; }
+	constexpr byte& operator&=(byte& left, byte right) noexcept { return left = left & right; }
 	[[nodiscard, gnu::always_inline]]
-	constexpr byte& operator^=(byte& l, byte r) noexcept { return l = l ^ r; }
+	constexpr byte& operator^=(byte& left, byte right) noexcept { return left = left ^ right; }
 
 	template<typename _TInt>
 	[[nodiscard, gnu::always_inline]]
-	constexpr _TInt to_integer(_impl::_byte_op_t<_TInt> b) noexcept { return _TInt(b); }
+	constexpr _TInt to_integer(_impl::_byte_op_t<_TInt> byt) noexcept { return _TInt(byt); }
 }
 
 #endif /* ABYSS_CSTDDEF */
