@@ -92,7 +92,7 @@ namespace std {
 	/* NOTE(aki): This is just a default def, the actual defs follow as specializations */
 	template<typename _Ty>
 	struct numeric_limits {
-		static constexpr bool is_specializedd{false};
+		static constexpr bool is_specialized{false};
 		static constexpr bool is_signed{false};
 		static constexpr bool is_integer{false};
 		static constexpr bool is_exact{false};
