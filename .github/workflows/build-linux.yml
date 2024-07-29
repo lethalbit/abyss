@@ -34,7 +34,6 @@ jobs:
         compiler:
           - 'gcc-12'
           - 'gcc-13'
-          - 'clang-16'
           - 'clang-17'
           - 'clang-18'
         cpp_std:
