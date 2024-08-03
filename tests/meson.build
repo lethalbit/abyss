@@ -9,6 +9,7 @@ endif
 
 
 headers = [
+	'cfloat',
 	'climits',
 	'cstdint',
 	'limits',
