@@ -43,7 +43,7 @@ struct A{
 
 static_assert(NULL == nullptr);
 // BUG(aki): I'm being a bad girl and assuming a lot here
-static_assert(offsetof(A, A::b) == alignof(int));
+static_assert(offsetof(A, b) == alignof(int));
 
 static_assert(details::is_same_v<std::nullptr_t, decltype(NULL)>);
 static_assert(details::is_same_v<std::size_t, decltype(sizeof(0))>);
