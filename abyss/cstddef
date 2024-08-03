@@ -15,17 +15,15 @@
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define offsetof(type, member) __builtin_offsetof(type, member)
 
-struct max_align_t {
-	[[gnu::aligned(alignof(long long))]]
-	long long _max_align_ll;
-	[[gnu::aligned(alignof(long double))]]
-	long double _max_align_ld;
-};
-
 namespace std {
 	/* NOTE(aki): ptrdiff_t, nullptr_t, and size_t have been moved to cosmogony/fundamental.hh */
 
-	using ::max_align_t;
+	struct max_align_t {
+		[[gnu::aligned(alignof(long long))]]
+		long long _max_align_ll;
+		[[gnu::aligned(alignof(long double))]]
+		long double _max_align_ld;
+	};
 
 	enum class byte : unsigned char {};
 
