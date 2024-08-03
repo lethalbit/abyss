@@ -42,6 +42,12 @@ namespace std {
 		template<>
 		struct _byte_op<unsigned char> { using _type = byte; };
 		template<>
+		struct _byte_op<char8_t> { using _type = byte; };
+		template<>
+		struct _byte_op<char16_t> { using _type = byte; };
+		template<>
+		struct _byte_op<char32_t> { using _type = byte; };
+		template<>
 		struct _byte_op<short> { using _type = byte; };
 		template<>
 		struct _byte_op<unsigned short> { using _type = byte; };
