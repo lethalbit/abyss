@@ -11,6 +11,7 @@ endif
 headers = [
 	'cfloat',
 	'climits',
+	'cstddef',
 	'cstdint',
 	'limits',
 	'source_location',
