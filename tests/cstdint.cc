@@ -169,9 +169,9 @@ int main(int, char**) {
 	static_assert(INT32_MIN  == -2147483648 );
 	static_assert(UINT32_MAX ==  4294967295U);
 
-	static_assert(INT64_MAX  ==  9223372036854775807LL);
-	static_assert(INT64_MIN  == -9223372036854775808LL);
-	static_assert(UINT64_MAX ==  18446744073709551615ULL);
+	static_assert(INT64_MAX  ==   9223372036854775807LL       );
+	static_assert(INT64_MIN  == (-9223372036854775807LL - 1LL));
+	static_assert(UINT64_MAX ==   18446744073709551615ULL     );
 
 	/* Max/Min values - Smallest-width */
 
@@ -187,9 +187,9 @@ int main(int, char**) {
 	static_assert(INT_LEAST32_MIN  <= -2147483648 );
 	static_assert(UINT_LEAST32_MAX >=  4294967295U);
 
-	static_assert(INT_LEAST64_MAX  >=  9223372036854775807LL);
-	static_assert(INT_LEAST64_MIN  <= -9223372036854775808LL);
-	static_assert(UINT_LEAST64_MAX >=  18446744073709551615ULL);
+	static_assert(INT_LEAST64_MAX  >=   9223372036854775807LL       );
+	static_assert(INT_LEAST64_MIN  <= (-9223372036854775807LL - 1LL));
+	static_assert(UINT_LEAST64_MAX >=   18446744073709551615ULL     );
 
 	/* Max/Min values - Fastest-type */
 
@@ -205,9 +205,9 @@ int main(int, char**) {
 	static_assert(INT_FAST32_MIN  <= -2147483648 );
 	static_assert(UINT_FAST32_MAX >=  4294967295U);
 
-	static_assert(INT_FAST64_MAX  >=   9223372036854775807L );
-	static_assert(INT_FAST64_MIN  <=  -9223372036854775808L );
-	static_assert(UINT_FAST64_MAX >=  18446744073709551615UL);
+	static_assert(INT_FAST64_MAX  >=   9223372036854775807L      );
+	static_assert(INT_FAST64_MIN  <= (-9223372036854775807L - 1L));
+	static_assert(UINT_FAST64_MAX >=   18446744073709551615UL    );
 
 	/* TODO(aki): {,U}INTPTR_{MAX,MIN} PTRDIFF_{MAX,MIN}, SIZE_MAX, WCHAR_{MAX,MIN}, WINT_{MAX,MIN}, SIG_ATOMIC_{MAX,MIN} */
 
