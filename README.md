@@ -16,7 +16,37 @@ There are also some non-standards compliant enhancements, such as making things 
 > of [C++23](https://wg21.link/std23) have been backported where possible, as such a compiler
 > with core language support for at lest C++20 is required.
 
-Currently only G++ 13 or newer is supported, due to relying on some built-in internals the compiler provides.
+<table>
+	<thead>
+		<tr>
+			<th>Compiler</th>
+			<th colspan="3">G++</th>
+			<th colspan="3">Clang++</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Version</td>
+			<td>12</td>
+			<td>13</td>
+			<td>14</td>
+			<td>16</td>
+			<td>17</td>
+			<td>18</td>
+		</tr>
+		<tr></tr>
+		<tr>
+			<td>Supported</td>
+			<td>:heavy_check_mark:</td>
+			<td>:heavy_check_mark:</td>
+			<td>:heavy_check_mark:</td>
+			<td>:x:</td>
+			<td>:heavy_check_mark:</td>
+			<td>:heavy_check_mark:</td>
+		</tr>
+	</tbody>
+</table>
+
 
 
 ## License
