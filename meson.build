@@ -64,6 +64,7 @@ extended_warnings = [
 	'-Wself-move',
 	'-Wdangling-reference',
 	'-Werror=switch',
+	'-Wnrvo'
 ]
 
 extra_flags = [ ]
