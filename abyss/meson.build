@@ -1,9 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-# These are internal only headers full of spooky implementation details
-abyss_cosmogony_headers = files([
-	'cosmogony/fundamental.hh'
-])
+subdir('cosmogony')
 
 # This will be filled out as they're implemented
 abyss_headers = files([
@@ -37,8 +34,7 @@ abyss_headers_extra = files([
 feature_defs = []
 
 if not meson.is_subproject()
-	install_headers(abyss_cosmogony_headers, subdir: 'abyss/cosmogony')
-	install_headers(abyss_headers,           subdir: 'abyss'          )
+	install_headers(abyss_headers, subdir: 'abyss')
 endif
 
 if virtual_enabled.allowed()
