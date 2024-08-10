@@ -4,6 +4,7 @@
 #define ABYSS_TYPE_TRAITS
 
 #include <abyss/cosmogony/fundamental.hh>
+#include <abyss/cosmogony/compiler_support.hh>
 
 // Silly clang-tidy, we're the ones defining the traits
 // NOLINTBEGIN(modernize-type-traits)
@@ -89,6 +90,22 @@ namespace std {
 	struct add_volatile { using type = volatile _Ty; };
 	template<typename _Ty>
 	using add_volatile_t = typename add_volatile<_Ty>::type;
+
+
+	template<typename _Ty>
+	struct is_const : false_type {};
+	template<typename _Ty>
+	struct is_const<const _Ty> : true_type {};
+	template<typename _Ty>
+	inline constexpr bool is_const_v = is_const<_Ty>::value;
+
+	template<typename _Ty>
+	struct is_volatile : false_type {};
+	template<typename _Ty>
+	struct is_volatile<volatile _Ty> : true_type {};
+	template<typename _Ty>
+	inline constexpr bool is_volatile_v = is_volatile<_Ty>::value;
+
 
 	template<typename _Ty>
 	struct remove_reference { using type = _Ty; };
@@ -346,20 +363,6 @@ namespace std {
 	struct is_reference : bool_constant<is_lvalue_reference_v<_Ty> || is_rvalue_reference_v<_Ty>> {};
 	template<typename _Ty>
 	inline constexpr bool is_reference_v = is_reference<_Ty>::value;
-
-	template<typename _Ty>
-	struct is_const : false_type {};
-	template<typename _Ty>
-	struct is_const<const _Ty> : true_type {};
-	template<typename _Ty>
-	inline constexpr bool is_const_v = is_const<_Ty>::value;
-
-	template<typename _Ty>
-	struct is_volatile : false_type {};
-	template<typename _Ty>
-	struct is_volatile<volatile _Ty> : true_type {};
-	template<typename _Ty>
-	inline constexpr bool is_volatile_v = is_volatile<_Ty>::value;
 
 	/* XXX(aki): This relies on a GCC builtin  */
 	template<typename _Ty>
