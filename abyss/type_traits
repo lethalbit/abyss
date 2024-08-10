@@ -660,7 +660,9 @@ namespace std {
 
 	/* TODO(aki): result_of */
 	/* TODO(aki): invoke_result */
-	/* TODO(aki): type_identity */
+
+	/* TODO(aki): unwrap_reference */
+	/* TODO(aki): unwrap_ref_decay */
 
 	/* TODO(aki): Needs to be made more robust */
 	template<typename...>
