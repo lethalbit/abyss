@@ -548,18 +548,21 @@ namespace std {
 
 	/* XXX(aki): This relies on a GCC builtin  */
 	template<typename _Ty, typename... _Args>
+	requires (_impl::_is_complete_or_unbounded(type_identity<_Ty>{}).value)
 	struct is_constructible : bool_constant<__is_constructible(_Ty, _Args...)> {};
 	template<typename _Ty, typename... _Args>
 	inline constexpr bool is_constructible_v = is_constructible<_Ty, _Args...>::value;
 
 	/* XXX(aki): This relies on a GCC builtin  */
 	template<typename _Ty, typename... _Args>
+	requires (_impl::_is_complete_or_unbounded(type_identity<_Ty>{}).value)
 	struct is_nothrow_constructible : bool_constant<__is_nothrow_constructible(_Ty, _Args...)> {};
 	template<typename _Ty, typename... _Args>
 	inline constexpr bool is_nothrow_constructible_v = is_nothrow_constructible<_Ty, _Args...>::value;
 
 	/* XXX(aki): This relies on a GCC builtin  */
 	template<typename _Ty, typename... _Args>
+	requires (_impl::_is_complete_or_unbounded(type_identity<_Ty>{}).value)
 	struct is_trivially_constructible : bool_constant<__is_trivially_constructible(_Ty, _Args...)> {};
 	template<typename _Ty, typename... _Args>
 	inline constexpr bool is_trivially_constructible_v = is_trivially_constructible<_Ty, _Args...>::value;
@@ -570,18 +573,21 @@ namespace std {
 
 	/* XXX(aki): This relies on a GCC builtin  */
 	template<typename _Ty, typename _Uy>
+	requires (_impl::_is_complete_or_unbounded(type_identity<_Ty>{}).value)
 	struct is_assignable : bool_constant<__is_assignable(_Ty, _Uy)> {};
 	template<typename _Ty, typename _Uy>
 	inline constexpr bool is_assignable_v = is_assignable<_Ty, _Uy>::value;
 
 	/* XXX(aki): This relies on a GCC builtin  */
 	template<typename _Ty, typename _Uy>
+	requires (_impl::_is_complete_or_unbounded(type_identity<_Ty>{}).value)
 	struct is_nothrow_assignable : bool_constant<__is_nothrow_assignable(_Ty, _Uy)> {};
 	template<typename _Ty, typename _Uy>
 	inline constexpr bool is_nothrow_assignable_v = is_nothrow_assignable<_Ty, _Uy>::value;
 
 	/* XXX(aki): This relies on a GCC builtin  */
 	template<typename _Ty, typename _Uy>
+	requires (_impl::_is_complete_or_unbounded(type_identity<_Ty>{}).value)
 	struct is_trivially_assignable : bool_constant<__is_trivially_assignable(_Ty, _Uy)> {};
 	template<typename _Ty, typename _Uy>
 	inline constexpr bool is_trivially_assignable_v = is_trivially_assignable<_Ty, _Uy>::value;
