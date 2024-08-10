@@ -539,22 +539,22 @@ namespace std {
 	inline constexpr bool is_scoped_enum_v = is_scoped_enum<_Ty>::value;
 
 	/* XXX(aki): This relies on a GCC builtin  */
-	template<typename _Ty>
-	struct is_constructible : bool_constant<__is_constructible(_Ty)> {};
-	template<typename _Ty>
-	inline constexpr bool is_constructible_v = is_constructible<_Ty>::value;
+	template<typename _Ty, typename... _Args>
+	struct is_constructible : bool_constant<__is_constructible(_Ty, _Args...)> {};
+	template<typename _Ty, typename... _Args>
+	inline constexpr bool is_constructible_v = is_constructible<_Ty, _Args...>::value;
 
 	/* XXX(aki): This relies on a GCC builtin  */
-	template<typename _Ty>
-	struct is_nothrow_constructible : bool_constant<__is_nothrow_constructible(_Ty)> {};
-	template<typename _Ty>
-	inline constexpr bool is_nothrow_constructible_v = is_nothrow_constructible<_Ty>::value;
+	template<typename _Ty, typename... _Args>
+	struct is_nothrow_constructible : bool_constant<__is_nothrow_constructible(_Ty, _Args...)> {};
+	template<typename _Ty, typename... _Args>
+	inline constexpr bool is_nothrow_constructible_v = is_nothrow_constructible<_Ty, _Args...>::value;
 
 	/* XXX(aki): This relies on a GCC builtin  */
-	template<typename _Ty>
-	struct is_trivially_constructible : bool_constant<__is_trivially_constructible(_Ty)> {};
-	template<typename _Ty>
-	inline constexpr bool is_trivially_constructible_v = is_trivially_constructible<_Ty>::value;
+	template<typename _Ty, typename... _Args>
+	struct is_trivially_constructible : bool_constant<__is_trivially_constructible(_Ty, _Args...)> {};
+	template<typename _Ty, typename... _Args>
+	inline constexpr bool is_trivially_constructible_v = is_trivially_constructible<_Ty, _Args...>::value;
 
 	/* TODO(aki): is_{,trivially_,nothrow_}default_constructible */
 	/* TODO(aki): is_{,trivially_,nothrow_}copy_constructible */

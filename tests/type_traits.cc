@@ -1016,15 +1016,40 @@ constexpr bool is_unbounded_array() noexcept {
 
 constexpr bool is_constructable() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+
+	static_assert(std::is_constructible_v<test::A>);
+	static_assert(std::is_constructible_v<test::P, const test::P&>);
+	static_assert(std::is_constructible_v<test::U, int>);
+
+	static_assert(!std::is_constructible_v<test::A, test::N>);
+	static_assert(!std::is_constructible_v<test::N, const test::N&>);
+
 	return true;
 }
 
-constexpr bool is_trivially_constructable() noexcept {
+constexpr bool is_trivially_constructible() noexcept {
+
+	/* BUG(aki): Needs more robust tests */
+
+	static_assert(std::is_trivially_constructible_v<test::A>);
+	static_assert(std::is_trivially_constructible_v<test::P, const test::P&>);
+
+	static_assert(!std::is_trivially_constructible_v<test::Y, int>);
+	static_assert(!std::is_trivially_constructible_v<test::N, const test::N&>);
 
 	return true;
 }
 
 constexpr bool is_nothrow_constructible() noexcept {
+
+	/* BUG(aki): Needs more robust tests */
+
+	static_assert(std::is_nothrow_constructible_v<test::A>);
+	static_assert(std::is_nothrow_constructible_v<test::M>);
+	static_assert(std::is_nothrow_constructible_v<test::P, const test::P&>);
+
+	static_assert(!std::is_nothrow_constructible_v<test::U, int>);
 
 	return true;
 }
