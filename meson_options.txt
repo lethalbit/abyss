@@ -29,6 +29,12 @@ option(
 	description: 'Enable components that require a runtime implementation'
 )
 option(
+	'threading_support',
+	type: 'feature',
+	value: 'disabled',
+	description: 'Enable threading support (requires runtime components)'
+)
+option(
 	'extra',
 	type: 'feature',
 	value: 'disabled',

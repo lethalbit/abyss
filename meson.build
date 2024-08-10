@@ -86,6 +86,7 @@ lib_dir  = pfx_dir / get_option('libdir')
 data_dir = pfx_dir / get_option('datadir')
 
 runtime_enabled    = get_option('runtime_components')
+threading_enabled  = get_option('threading_support').disable_if(not runtime_enabled.allowed())
 rtti_enabled       = get_option('rtti_support')
 exceptions_enabled = get_option('exception_support')
 virtual_enabled    = get_option('virtual_support')

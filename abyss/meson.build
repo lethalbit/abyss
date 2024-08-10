@@ -16,6 +16,10 @@ abyss_headers_runtime = files([
 
 ])
 
+abyss_headers_runtime_threads = files([
+
+])
+
 abyss_headers_rtti = files([
 ])
 
@@ -49,6 +53,15 @@ if runtime_enabled.allowed()
 	library_config.set('ABYSS_RUNTIME_SUPPORT', true)
 	if not meson.is_subproject()
 		install_headers(abyss_headers_runtime, subdir: 'abyss')
+	endif
+endif
+
+if threading_enabled.allowed()
+	warning('Thread support is experimental and/or completely broken!')
+	feature_defs += [ '-DABYSS_THREADING_SUPPORT' ]
+	library_config.set('ABYSS_THREADING_SUPPORT', true)
+	if not meson.is_subproject()
+		install_headers(abyss_headers_runtime_threads, subdir: 'abyss')
 	endif
 endif
 
