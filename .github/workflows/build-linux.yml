@@ -32,7 +32,6 @@ jobs:
           - { id: ubuntu-22.04, name: jammy }
           - { id: ubuntu-24.04, name: noble }
         compiler:
-          - 'gcc-12'
           - 'gcc-13'
           - 'clang-17'
           - 'clang-18'
