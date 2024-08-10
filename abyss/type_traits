@@ -621,7 +621,6 @@ namespace std {
 
 	/* TODO(aki): aligned_union */
 
-	/* TODO(aki): decay */
 
 	template<bool _Bval, typename _True, typename _False>
 	struct conditional { using type = _True; };
@@ -629,6 +628,24 @@ namespace std {
 	struct conditional<false, _True, _False> { using type = _False; };
 	template<bool _Bval, typename _True, typename _False>
 	using conditional_t = typename conditional<_Bval, _True, _False>::type;
+
+	template<typename _Ty>
+	struct decay {
+	private:
+		using _U = std::remove_reference_t<_Ty>;
+	public:
+		using type = std::conditional_t<
+			std::is_array_v<_U>,
+			std::add_pointer_t<std::remove_extent_t<_U>>,
+			std::conditional_t<
+				std::is_function_v<_U>,
+				std::add_pointer_t<_U>,
+				std::remove_cv_t<_U>
+			>
+		>;
+	};
+	template<typename _Ty>
+	using decay_t = typename decay<_Ty>::type;
 
 	/* TODO(aki): common_type */
 	/* TODO(aki): {,basic_}common_reference */
