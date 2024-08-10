@@ -1014,7 +1014,7 @@ constexpr bool is_unbounded_array() noexcept {
 }
 
 
-constexpr bool is_constructable() noexcept {
+constexpr bool is_constructible() noexcept {
 
 	/* BUG(aki): Needs more robust tests */
 
@@ -1054,12 +1054,12 @@ constexpr bool is_nothrow_constructible() noexcept {
 	return true;
 }
 
-constexpr bool is_default_constructable() noexcept {
+constexpr bool is_default_constructible() noexcept {
 
 	return true;
 }
 
-constexpr bool is_trivially_default_constructable() noexcept {
+constexpr bool is_trivially_default_constructible() noexcept {
 
 	return true;
 }
@@ -1069,12 +1069,12 @@ constexpr bool is_nothrow_default_constructible() noexcept {
 	return true;
 }
 
-constexpr bool is_copy_constructable() noexcept {
+constexpr bool is_copy_constructible() noexcept {
 
 	return true;
 }
 
-constexpr bool is_trivially_copy_constructable() noexcept {
+constexpr bool is_trivially_copy_constructible() noexcept {
 
 	return true;
 }
@@ -1084,12 +1084,12 @@ constexpr bool is_nothrow_copy_constructible() noexcept {
 	return true;
 }
 
-constexpr bool is_move_constructable() noexcept {
+constexpr bool is_move_constructible() noexcept {
 
 	return true;
 }
 
-constexpr bool is_trivially_move_constructable() noexcept {
+constexpr bool is_trivially_move_constructible() noexcept {
 
 	return true;
 }
@@ -1534,17 +1534,17 @@ int main(int, char**) {
 		is_unsigned() &&
 		is_bounded_array() &&
 		is_unbounded_array() &&
-		is_constructable() &&
-		is_trivially_constructable() &&
+		is_constructible() &&
+		is_trivially_constructible() &&
 		is_nothrow_constructible() &&
-		is_default_constructable() &&
-		is_trivially_default_constructable() &&
+		is_default_constructible() &&
+		is_trivially_default_constructible() &&
 		is_nothrow_default_constructible() &&
-		is_copy_constructable() &&
-		is_trivially_copy_constructable() &&
+		is_copy_constructible() &&
+		is_trivially_copy_constructible() &&
 		is_nothrow_copy_constructible() &&
-		is_move_constructable() &&
-		is_trivially_move_constructable() &&
+		is_move_constructible() &&
+		is_trivially_move_constructible() &&
 		is_nothrow_move_constructible() &&
 		is_assignable() &&
 		is_trivially_assignable() &&
