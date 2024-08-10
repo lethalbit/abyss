@@ -10,6 +10,7 @@ abyss_headers = files([
 	'limits',
 	'source_location',
 	'type_traits',
+	'version'
 ])
 
 abyss_headers_runtime = files([

@@ -1,0 +1,74 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+#pragma once
+#if !defined(ABYSS_VERSION)
+#define ABYSS_VERSION
+
+#include <abyss/cosmogony/library_config.hh>
+
+/* NOTE(aki): This will mostly be not-done until more things are fleshed out */
+
+// NOLINTBEGIN(cppcoreguidelines-macro-usage)
+
+/* General */
+#define __cpp_lib_char8_t 201907L 							/* char8_t support (C++ 20) */
+
+/* Header: cstddef */
+#define __cpp_lib_byte 201603L 								/* std::byte (C++ 17) */
+
+/* Header: source_location */
+#define __cpp_lib_source_location 201907L					/* std::source_location (C++ 20) */
+
+/* Header: type_traits */
+#define __cpp_lib_bool_constant 201505L 					/* std::bool_constant (C++17) */
+#define __cpp_lib_bounded_array_traits 201902L 				/* std::is_bounded_array, std::is_unbounded_array (C++ 20) */
+#define __cpp_lib_has_unique_object_representations 201606L	/* std::has_unique_object_representations (C++ 17) */
+#define __cpp_lib_integral_constant_callable 201304L 		/* std::integral_constant::operator() (C++ 14) */
+#define __cpp_lib_is_aggregate 201703L 						/* std::is_aggregate (C++ 17) */
+#define __cpp_lib_is_constant_evaluated 201811L				/* std::is_constant_evaluated (C++ 20) */
+#define __cpp_lib_is_final 201402L							/* std::is_final (C++ 14)*/
+#define __cpp_lib_is_invocable 201703L						/* std::is_invocable, std::invoke_result (C++ 17) */
+#define __cpp_lib_is_layout_compatible 201907L				/* std::is_layout_compatible (C++ 20) */
+#define __cpp_lib_is_nothrow_convertible 201806L			/* std::is_nothrow_convertible (C++ 20) */
+#define __cpp_lib_is_null_pointer 201309L					/* std::is_null_pointer (C++ 14) */
+#define __cpp_lib_is_pointer_interconvertible 201907L		/* std::is_pointer_interconvertible_with_class, std::is_pointer_interconvertible_base_of (C++ 20) */
+#define __cpp_lib_is_scoped_enum 202011L					/* std::is_scoped_enum (C++ 23) */
+#define __cpp_lib_is_swappable 201603L						/* std::is_{,nothrow_}swappable{,_with} (C++ 17) */
+#define __cpp_lib_logical_traits 201510L					/* logical ops on traits (C++ 17) */
+#define __cpp_lib_remove_cvref 201711L						/* std::remove_cvref (C++ 20) */
+#define __cpp_lib_transformation_trait_aliases 201304L		/* Transformation trait alias templates (CC++ 14) */
+#define __cpp_lib_type_identity 201806L						/* std::type_identity (C++ 20) */
+#define __cpp_lib_type_trait_variable_templates 201510L     /* Trait _v template aliases (C++ 17) */
+#define __cpp_lib_unwrap_ref 201811L 						/* std::unwrap_ref_decay, std::unwrap_reference (C++ 20) */
+#define __cpp_lib_void_t 201411L							/* std::void_t (C++ 17) */
+#define __cpp_lib_result_of_sfinae 201210L					/* std::result_of and SFINAE (C++ 14) */
+
+
+
+#if defined(ABYSS_VIRTUAL_SUPPORT)
+
+#endif /* ABYSS_VIRTUAL_SUPPORT */
+
+#if defined(ABYSS_RUNTIME_SUPPORT)
+
+#endif /* ABYSS_RUNTIME_SUPPORT */
+
+#if defined(ABYSS_THREADING_SUPPORT)
+
+#endif /* ABYSS_THREADING_SUPPORT */
+
+#if defined(ABYSS_RTTI_SUPPORT)
+
+#endif /* ABYSS_RTTI_SUPPORT */
+
+#if defined(ABYSS_EXCEPTION_SUPPORT)
+
+#endif /* ABYSS_EXCEPTION_SUPPORT */
+
+#if defined(ABYSS_STD23_SUPPLEMENTAL)
+
+#endif /* ABYSS_STD23_SUPPLEMENTAL */
+
+// NOLINTEND(cppcoreguidelines-macro-usage)
+
+#endif /* ABYSS_VERSION */
+/* vim: set ft=cpp ts=4 sw=4 noexpandtab: */
