@@ -19,9 +19,9 @@ headers = [
 ]
 
 
-extra_args = [
+extra_args = cxx.get_supported_arguments([
 	'-fconcepts-diagnostics-depth=4',
-]
+])
 
 foreach hdr : headers
 	foreach mode : ['debug', 'debugoptimized', 'release']
