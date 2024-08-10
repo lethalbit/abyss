@@ -18,14 +18,21 @@ headers = [
 ]
 
 foreach hdr : headers
-	test(
-		hdr,
-		executable(
-			'@0@-test'.format(hdr),
-			'@0@.cc'.format(hdr),
-			include_directories: _lib_include,
-			dependencies: [ doctest ]
-		),
-		is_parallel: true,
-	)
+	foreach mode : ['debug', 'debugoptimized', 'release']
+		test(
+			'header-@0@-@1@'.format(hdr, mode),
+			executable(
+				'header-@0@-@1@-test'.format(hdr, mode),
+				'@0@.cc'.format(hdr),
+				include_directories: _lib_include,
+				dependencies: [ doctest ],
+				override_options: {
+					'buildtype': mode,
+					'b_sanitize': 'address,undefined',
+					'debug': mode.startswith('debug')
+				}
+			),
+			is_parallel: true,
+		)
+	endforeach
 endforeach
