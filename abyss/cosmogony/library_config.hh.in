@@ -1,0 +1,22 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+#pragma once
+#if !defined(ABYSS_COSMOGONY_LIBRARY_CONFIG)
+#define ABYSS_COSMOGONY_LIBRARY_CONFIG
+
+/* /!\ ACHTUNG /!\ ACHTUNG /!\ ACHTUNG /!\ ACHTUNG /!\ ACHTUNG /!\ */
+/*      THIS IS AN INTERNAL HEADER, DON'T INCLUDE IT DIRECTLY      */
+
+// NOLINTBEGIN(cppcoreguidelines-macro-usage)
+
+#mesondefine ABYSS_VIRTUAL_SUPPORT
+#mesondefine ABYSS_RUNTIME_SUPPORT
+#mesondefine ABYSS_THREADING_SUPPORT
+#mesondefine ABYSS_RTTI_SUPPORT
+#mesondefine ABYSS_EXCEPTION_SUPPORT
+#mesondefine ABYSS_STD23_SUPPLEMENTAL
+#mesondefine ABYSS_EXTRA
+
+// NOLINTEND(cppcoreguidelines-macro-usage)
+
+#endif /* ABYSS_COSMOGONY_LIBRARY_CONFIG */
+/* vim: set ft=cpp ts=4 sw=4 noexpandtab: */
