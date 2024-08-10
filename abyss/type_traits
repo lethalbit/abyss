@@ -266,9 +266,16 @@ namespace std {
 	template<typename _Ty>
 	inline constexpr bool is_class_v = is_class<_Ty>::value;
 
+#if __ABYSS_HAS_BUILTIN(__is_function)
 	/* XXX(aki): This relies on a GCC builtin  */
 	template<typename _Ty>
 	struct is_function : bool_constant<__is_function(_Ty)> {};
+#else
+	template<typename _Ty>
+	struct is_function : bool_constant<!is_const_v<const _Ty>> {};
+	template<typename _Ty>
+	struct is_function<_Ty&> : false_type {};
+#endif
 	template<typename _Ty>
 	inline constexpr bool is_function_v = is_function<_Ty>::value;
 
