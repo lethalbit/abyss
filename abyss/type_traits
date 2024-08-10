@@ -51,6 +51,39 @@ namespace std {
 	template<bool _BVal, typename _Ty = void>
 	using enable_if_t = typename enable_if<_BVal, _Ty>::type;
 
+
+	template<bool _Bval, typename _True, typename _False>
+	struct conditional { using type = _True; };
+	template<typename _True, typename _False>
+	struct conditional<false, _True, _False> { using type = _False; };
+	template<bool _Bval, typename _True, typename _False>
+	using conditional_t = typename conditional<_Bval, _True, _False>::type;
+
+	/* TODO(aki): Needs to be made more robust */
+	template<typename...>
+	struct conjunction : true_type {};
+	template<typename _Ty>
+	struct conjunction<_Ty> : _Ty {};
+	template<typename _Ty, typename... _Tn>
+	struct conjunction<_Ty, _Tn...> : conditional_t<bool(_Ty::value), conjunction<_Tn...>, _Ty> {};
+	template<typename... _Ty>
+	inline constexpr bool conjunction_v = conjunction<_Ty...>::value;
+
+	/* TODO(aki): Needs to be made more robust */
+	template<typename...>
+	struct disjunction : false_type {};
+	template<typename _Ty>
+	struct disjunction<_Ty> : _Ty {};
+	template<typename _Ty, typename... _Tn>
+	struct disjunction<_Ty, _Tn...> : conditional_t<bool(_Ty::value), _Ty, disjunction<_Tn...>> {};
+	template<typename... _Ty>
+	inline constexpr bool disjunction_v = disjunction<_Ty...>::value;
+
+	template<typename _Ty>
+	struct negation : bool_constant<!bool(_Ty::value)> {};
+	template<typename _Ty>
+	inline constexpr bool negation_v = negation<_Ty>::value;
+
 	template<typename _Ty>
 	struct remove_cv { using type = _Ty; };
 	template<typename _Ty>
@@ -647,13 +680,6 @@ namespace std {
 	/* TODO(aki): aligned_union */
 
 
-	template<bool _Bval, typename _True, typename _False>
-	struct conditional { using type = _True; };
-	template<typename _True, typename _False>
-	struct conditional<false, _True, _False> { using type = _False; };
-	template<bool _Bval, typename _True, typename _False>
-	using conditional_t = typename conditional<_Bval, _True, _False>::type;
-
 	template<typename _Ty>
 	struct decay {
 	private:
@@ -688,31 +714,6 @@ namespace std {
 
 	/* TODO(aki): unwrap_reference */
 	/* TODO(aki): unwrap_ref_decay */
-
-	/* TODO(aki): Needs to be made more robust */
-	template<typename...>
-	struct conjunction : true_type {};
-	template<typename _Ty>
-	struct conjunction<_Ty> : _Ty {};
-	template<typename _Ty, typename... _Tn>
-	struct conjunction<_Ty, _Tn...> : conditional_t<bool(_Ty::value), conjunction<_Tn...>, _Ty> {};
-	template<typename... _Ty>
-	inline constexpr bool conjunction_v = conjunction<_Ty...>::value;
-
-	/* TODO(aki): Needs to be made more robust */
-	template<typename...>
-	struct disjunction : false_type {};
-	template<typename _Ty>
-	struct disjunction<_Ty> : _Ty {};
-	template<typename _Ty, typename... _Tn>
-	struct disjunction<_Ty, _Tn...> : conditional_t<bool(_Ty::value), _Ty, disjunction<_Tn...>> {};
-	template<typename... _Ty>
-	inline constexpr bool disjunction_v = disjunction<_Ty...>::value;
-
-	template<typename _Ty>
-	struct negation : bool_constant<!bool(_Ty::value)> {};
-	template<typename _Ty>
-	inline constexpr bool negation_v = negation<_Ty>::value;
 
 	/* XXX(aki): This relies on a GCC builtin  */
 	template<typename _Ty, typename _M>
