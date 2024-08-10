@@ -18,15 +18,19 @@ headers = [
 	'type_traits',
 ]
 
+
+extra_args = [
+	'-fconcepts-diagnostics-depth=4',
+]
+
 foreach hdr : headers
 	foreach mode : ['debug', 'debugoptimized', 'release']
 		foreach fallback_impl : [true, false]
 			if fallback_impl
 				fallback_mode = 'fallback'
-				extra_args = ['-D__ABYSS_DEBUG_FALLBACK_IMPLS']
+				extra_args += '-D__ABYSS_DEBUG_FALLBACK_IMPLS'
 			else
 				fallback_mode = 'no-fallback'
-				extra_args = []
 			endif
 
 			test(
