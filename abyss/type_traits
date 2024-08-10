@@ -642,10 +642,23 @@ namespace std {
 	template<typename _Ty, typename _Uy>
 	inline constexpr bool is_trivially_assignable_v = is_trivially_assignable<_Ty, _Uy>::value;
 
+	template<typename _Ty>
+	requires (_impl::_is_complete_or_unbounded(type_identity<_Ty>{}).value)
+	struct is_copy_assignable : bool_constant<is_assignable_v<add_lvalue_reference_t<_Ty>, add_lvalue_reference_t<const _Ty>>> {};
+	template<typename _Ty>
+	inline constexpr bool is_copy_assignable_v = is_copy_assignable<_Ty>::value;
 
-	/* TODO(aki): is_{,trivially_,nothrow_}copy_assignable */
-	/* TODO(aki): is_{,trivially_,nothrow_}move_assignable */
-	/* TODO(aki): is_{,trivially_,nothrow_}destructible */
+	template<typename _Ty>
+	requires (_impl::_is_complete_or_unbounded(type_identity<_Ty>{}).value)
+	struct is_trivially_copy_assignable : bool_constant<is_trivially_assignable_v<add_lvalue_reference_t<_Ty>, add_lvalue_reference_t<const _Ty>>> {};
+	template<typename _Ty>
+	inline constexpr bool is_trivially_copy_assignable_v = is_trivially_copy_assignable<_Ty>::value;
+
+	template<typename _Ty>
+	requires (_impl::_is_complete_or_unbounded(type_identity<_Ty>{}).value)
+	struct is_nothrow_copy_assignable : bool_constant<is_nothrow_assignable_v<add_lvalue_reference_t<_Ty>, add_lvalue_reference_t<const _Ty>>> {};
+	template<typename _Ty>
+	inline constexpr bool is_nothrow_copy_assignable_v = is_nothrow_copy_assignable<_Ty>::value;
 
 
 	/* XXX(aki): This relies on a GCC builtin  */
