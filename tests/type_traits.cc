@@ -1056,15 +1056,44 @@ constexpr bool is_nothrow_constructible() noexcept {
 
 constexpr bool is_default_constructible() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+
+	static_assert(std::is_default_constructible_v<test::A>);
+	static_assert(std::is_default_constructible_v<test::M>);
+	static_assert(std::is_default_constructible_v<test::O>);
+	static_assert(std::is_default_constructible_v<test::AA>);
+
+	static_assert(!std::is_default_constructible_v<test::N>);
+	static_assert(!std::is_default_constructible_v<test::U>);
+	static_assert(!std::is_default_constructible_v<test::Y>);
+
 	return true;
 }
 
 constexpr bool is_trivially_default_constructible() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+
+	static_assert(std::is_trivially_default_constructible_v<test::A>);
+	static_assert(std::is_trivially_default_constructible_v<test::M>);
+	static_assert(std::is_trivially_default_constructible_v<test::AA>);
+
+	static_assert(!std::is_trivially_default_constructible_v<test::N>);
+	static_assert(!std::is_trivially_default_constructible_v<test::O>);
+	static_assert(!std::is_trivially_default_constructible_v<test::U>);
+	static_assert(!std::is_trivially_default_constructible_v<test::Y>);
+
 	return true;
 }
 
 constexpr bool is_nothrow_default_constructible() noexcept {
+
+	/* BUG(aki): Needs more robust tests */
+
+	static_assert(std::is_nothrow_default_constructible_v<test::A>);
+	static_assert(std::is_nothrow_default_constructible_v<test::M>);
+	static_assert(std::is_nothrow_default_constructible_v<test::O>);
+	static_assert(std::is_nothrow_default_constructible_v<test::AA>);
 
 	return true;
 }
