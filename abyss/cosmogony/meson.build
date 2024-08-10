@@ -2,6 +2,7 @@
 
 # These are internal only headers full of spooky implementation details
 abyss_cosmogony_headers = files([
+	'compiler_support.hh',
 	'fundamental.hh'
 ])
 
