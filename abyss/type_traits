@@ -172,6 +172,13 @@ namespace std {
 	using add_rvalue_reference_t = typename add_rvalue_reference<_Ty>::type;
 
 
+	namespace _impl {
+		template<typename _Ty>
+		add_rvalue_reference_t<_Ty> declval() noexcept {
+			static_assert(false, "declval is not allowed in an evaluated context");
+		}
+	}
+
 	template<typename _Ty>
 	struct remove_cvref : type_identity<remove_cv_t<remove_reference_t<_Ty>>> {};
 	template<typename _Ty>
