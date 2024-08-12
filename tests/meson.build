@@ -43,7 +43,7 @@ foreach hdr : headers
 					cpp_args: extra_args,
 					override_options: {
 						'buildtype': mode,
-						'b_sanitize': 'address,undefined',
+						'b_sanitize': is_windows ? 'none' : 'address,undefined',
 						'debug': mode.startswith('debug')
 					}
 				),

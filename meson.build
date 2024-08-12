@@ -77,6 +77,7 @@ add_project_arguments(
 
 pkgconfig = import('pkgconfig')
 
+is_windows = (host_machine.system() == 'windows')
 
 build_tests = get_option('build_tests')
 
