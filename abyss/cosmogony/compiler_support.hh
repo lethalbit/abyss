@@ -9,7 +9,10 @@
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
 
 /* This allows us to run tests on any fallback implementations we have as well */
-#define __ABYSS_HAS_BUILTIN(b) (__has_builtin(b) && !defined(__ABYSS_DEBUG_FALLBACK_IMPLS))
+#if !defined(__ABYSS_DEBUG_FALLBACK_IMPLS)
+#	define __ABYSS_DEBUG_FALLBACK_IMPLS 0
+#endif
+#define __ABYSS_HAS_BUILTIN(b) (!__ABYSS_DEBUG_FALLBACK_IMPLS && __has_builtin(b))
 
 /* Allows us to defined pragmas via a macro */
 #if defined(__GNUC__) || defined(__clang__)
