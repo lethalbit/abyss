@@ -47,3 +47,10 @@ option(
 	value: true,
 	description: 'Build and run library tests (RECOMMENDED)'
 )
+
+option(
+	'build_benchmarks',
+	type: 'boolean',
+	value: true,
+	description: 'Build and run library benchmarks'
+)

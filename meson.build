@@ -79,7 +79,8 @@ pkgconfig = import('pkgconfig')
 
 is_windows = (host_machine.system() == 'windows')
 
-build_tests = get_option('build_tests')
+build_tests      = get_option('build_tests')
+build_benchmarks = get_option('build_benchmarks')
 
 pfx_dir  = get_option('prefix')
 bin_dir  = pfx_dir / get_option('bindir')
@@ -96,9 +97,14 @@ extra_enabled      = get_option('extra')
 
 subdir('abyss')
 
+_lib_include = include_directories('.')
+
 if build_tests
-	_lib_include = include_directories('.')
 	subdir('tests')
+endif
+
+if build_benchmarks
+	subdir('benchmarks')
 endif
 
 
