@@ -89,9 +89,9 @@ data_dir = pfx_dir / get_option('datadir')
 
 runtime_enabled    = get_option('runtime_components')
 threading_enabled  = get_option('threading_support').disable_if(not runtime_enabled.allowed())
-rtti_enabled       = get_option('rtti_support')
-exceptions_enabled = get_option('exception_support')
-virtual_enabled    = get_option('virtual_support')
+rtti_enabled       = get_option('rtti_support').disable_if(not runtime_enabled.allowed())
+exceptions_enabled = get_option('exception_support').disable_if(not runtime_enabled.allowed())
+virtual_enabled    = get_option('virtual_support').disable_if(not runtime_enabled.allowed())
 cxx23_enabled      = get_option('cxx23_supplemental')
 extra_enabled      = get_option('extra')
 
