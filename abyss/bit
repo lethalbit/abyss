@@ -1,0 +1,377 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+#pragma once
+#if !defined(ABYSS_BIT)
+#define ABYSS_BIT
+
+#include <abyss/cosmogony/compiler_support.hh>
+
+#include <abyss/type_traits>
+#include <abyss/limits>
+
+/* NOTE(aki): This is not purely standards compliant as instances of return values of `int` */
+/*            where the result should not be negative have been replaced with `size_t`.     */
+
+namespace std {
+	namespace _impl {
+		template<typename _Ty>
+		struct reduced_limits {
+			static constexpr auto digits{std::numeric_limits<_Ty>::digits};
+			static constexpr auto max{std::numeric_limits<_Ty>::max()};
+		};
+	};
+
+	enum struct endian {
+		little = __ORDER_LITTLE_ENDIAN__,
+		big    = __ORDER_BIG_ENDIAN__,
+		native = __BYTE_ORDER__,
+	};
+
+
+	/* XXX(aki): This relies on a GCC builtin  */
+	template<typename _Ty, typename _Uy>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		sizeof(_Ty) == sizeof(_Uy) &&
+		std::is_trivially_copyable_v<_Ty> &&
+		std::is_trivially_copyable_v<_Uy>,
+		_Ty
+	> bit_cast(const _Uy& from) noexcept {
+		return __builtin_bit_cast(_Ty, from);
+	}
+
+
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_integral_v<_Ty> && std::has_unique_object_representations_v<_Ty>,
+		_Ty
+	> byteswap(_Ty value) noexcept {
+		if constexpr (sizeof(_Ty) == 1) {
+		/* NOTE(aki): __builtin_ror{8,16,32,64} don't exist yet, but just in case:tm: */
+		/*            see: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58872         */
+#if __ABYSS_HAS_BUILTIN(__builtin_ror8)
+			return __builtin_ror8(value, 4)
+#else
+			return _Ty(
+				((value & 0x0FU) << 4U) |
+				((value & 0xF0U) >> 4U)
+			);
+#endif
+		}
+
+		if constexpr (sizeof(_Ty) == 2) {
+#if __ABYSS_HAS_BUILTIN(__builtin_bswap16)
+			return __builtin_bswap16(value);
+#else
+			return _Ty(
+				((value & 0x00FFU) << 8U) |
+				((value & 0xFF00U) >> 8U)
+			);
+#endif
+		}
+
+		if constexpr (sizeof(_Ty) == 4) {
+#if __ABYSS_HAS_BUILTIN(__builtin_bswap32)
+			return __builtin_bswap32(value);
+#else
+			return _Ty(
+				((value & 0x0000'00FFU) << 24U) |
+				((value & 0x0000'FF00U) <<  8U) |
+				((value & 0x00FF'0000U) >>  8U) |
+				((value & 0xFF00'0000U) >> 24U)
+			);
+#endif
+		}
+
+		if constexpr (sizeof(_Ty) == 8) {
+#if __ABYSS_HAS_BUILTIN(__builtin_bswap64)
+			return __builtin_bswap64(value);
+#else
+			return _Ty(
+				((value & 0x0000'0000'0000'00FFU) << 56U) |
+				((value & 0x0000'0000'0000'FF00U) << 40U) |
+				((value & 0x0000'0000'00FF'0000U) << 24U) |
+				((value & 0x0000'0000'FF00'0000U) <<  8U) |
+				((value & 0x0000'00FF'0000'0000U) >>  8U) |
+				((value & 0x0000'FF00'0000'0000U) >> 24U) |
+				((value & 0x00FF'0000'0000'0000U) >> 40U) |
+				((value & 0xFF00'0000'0000'0000U) >> 56U)
+			);
+#endif
+		}
+
+		if constexpr (sizeof(_Ty) == 16) {
+#if __ABYSS_HAS_BUILTIN(__builtin_bswap128)
+			return __builtin_bswap128(value);
+#else
+			constexpr _Ty lower{_Ty(
+				(((value >> 64U) & 0x0000'0000'0000'00FFU) << 56U) |
+				(((value >> 64U) & 0x0000'0000'0000'FF00U) << 40U) |
+				(((value >> 64U) & 0x0000'0000'00FF'0000U) << 24U) |
+				(((value >> 64U) & 0x0000'0000'FF00'0000U) <<  8U) |
+				(((value >> 64U) & 0x0000'00FF'0000'0000U) >>  8U) |
+				(((value >> 64U) & 0x0000'FF00'0000'0000U) >> 24U) |
+				(((value >> 64U) & 0x00FF'0000'0000'0000U) >> 40U) |
+				(((value >> 64U) & 0xFF00'0000'0000'0000U) >> 56U)
+			)};
+
+			constexpr _Ty upper{_Ty(
+				((value & 0x0000'0000'0000'00FFU) << 56U) |
+				((value & 0x0000'0000'0000'FF00U) << 40U) |
+				((value & 0x0000'0000'00FF'0000U) << 24U) |
+				((value & 0x0000'0000'FF00'0000U) <<  8U) |
+				((value & 0x0000'00FF'0000'0000U) >>  8U) |
+				((value & 0x0000'FF00'0000'0000U) >> 24U) |
+				((value & 0x00FF'0000'0000'0000U) >> 40U) |
+				((value & 0xFF00'0000'0000'0000U) >> 56U)
+			) << 64U};
+
+			return _Ty(lower | upper);
+#endif
+		}
+		/* TODO(aki): Maybe fallback/arbitrary byte-width swapping? */
+	}
+
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_unsigned_v<_Ty> && std::is_integral_v<_Ty>,
+		std::size_t
+	> popcount(_Ty value) noexcept {
+		constexpr auto _ty_digits{_impl::reduced_limits<_Ty>::digits};
+
+		static_assert(
+			_ty_digits <= _impl::reduced_limits<unsigned long long>::digits,
+			"Only up to 64-bit integer types are supported (for now)"
+		);
+
+		if constexpr (_ty_digits <= _impl::reduced_limits<unsigned int>::digits) {
+#if __ABYSS_HAS_BUILTIN(__builtin_popcount)
+			return std::size_t(__builtin_popcount(value));
+#else
+			/* BUG(aki): This relies on integer promotion from 8/16-bit types to 32bit */
+			auto res{value - ((value >> 1U) & 0x5555'5555U)};
+			res = (res & 0x3333'3333U) + ((res >> 2U) & 0x3333'3333U);
+			res = (res + (res >> 4U)) & 0x0F0F'0F0FU;
+			return std::size_t((res * 0x0101'0101U) >> 24U);
+#endif
+		} else if constexpr (_ty_digits <= _impl::reduced_limits<unsigned long>::digits) {
+#if __ABYSS_HAS_BUILTIN(__builtin_popcountl)
+			return std::size_t(__builtin_popcountl(value));
+#else
+			auto res{value - ((value >> 1U) & 0x5555'5555'5555'5555U)};
+			res = (res & 0x3333'3333'3333'3333U) + ((res >> 2U) & 0x3333'3333'3333'3333U);
+			res = (res + (res >> 4U)) & 0x0F0F'0F0F'0F0F'0F0FU;
+			return std::size_t((res * 0x0101'0101'0101'0101U) >> 56U);
+#endif
+		} else if constexpr (_ty_digits <= _impl::reduced_limits<unsigned long long>::digits) {
+#if __ABYSS_HAS_BUILTIN(__builtin_popcountll)
+			return std::size_t(__builtin_popcountll(value));
+#else
+			/* BUG(aki): This is identical to the `unsigned long` impl */
+			auto res{value - ((value >> 1U) & 0x5555'5555'5555'5555U)};
+			res = (res & 0x3333'3333'3333'3333U) + ((res >> 2U) & 0x3333'3333'3333'3333U);
+			res = (res + (res >> 4U)) & 0x0F0F'0F0F'0F0F'0F0FU;
+			return std::size_t((res * 0x0101'0101'0101'0101U) >> 56U);
+#endif
+		}
+	}
+
+	/* This is such a stupid name for this function */
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_unsigned_v<_Ty> && std::is_integral_v<_Ty>,
+		bool
+	> has_single_bit(_Ty value) noexcept {
+		return std::popcount(value) == 1;
+	}
+
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_unsigned_v<_Ty> && std::is_integral_v<_Ty>,
+		std::size_t
+	> countl_zero(_Ty value) noexcept {
+		constexpr auto _ty_digits{_impl::reduced_limits<_Ty>::digits};
+
+		if (value == 0) {
+			return _ty_digits;
+		}
+
+		if constexpr (_ty_digits <= _impl::reduced_limits<unsigned int>::digits) {
+#if __ABYSS_HAS_BUILTIN(__builtin_clz)
+			return __builtin_clz(value);
+#endif
+		} else if constexpr (_ty_digits <= _impl::reduced_limits<unsigned long>::digits) {
+#if __ABYSS_HAS_BUILTIN(__builtin_clzl)
+			return __builtin_clzl(value);
+#endif
+		} else if constexpr (_ty_digits <= _impl::reduced_limits<unsigned long long>::digits) {
+#if __ABYSS_HAS_BUILTIN(__builtin_clzll)
+			return __builtin_clzll(value);
+#endif
+		}
+
+		/* fallback/large type impl */
+		constexpr auto low_bits{_ty_digits - 1};
+		std::size_t res{0U};
+		for (std::size_t bit{0U}; bit < _ty_digits; ++bit) {
+			if ((value >> (low_bits - bit)) & 1U) {
+				break;
+			}
+			++res;
+		}
+		return res;
+	}
+
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_unsigned_v<_Ty> && std::is_integral_v<_Ty>,
+		std::size_t
+	> countl_one(_Ty value) noexcept {
+		/* Invert the value so we can cheat ant use clz */
+		return std::countl_zero(_Ty(~value));
+	}
+
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_unsigned_v<_Ty> && std::is_integral_v<_Ty>,
+		std::size_t
+	> countr_zero(_Ty value) noexcept {
+		constexpr auto _ty_digits{_impl::reduced_limits<_Ty>::digits};
+
+		if (value == 0) {
+			return _ty_digits;
+		}
+
+		if constexpr (_ty_digits <= _impl::reduced_limits<unsigned int>::digits) {
+#if __ABYSS_HAS_BUILTIN(__builtin_ctz)
+			return __builtin_ctz(value);
+#endif
+		} else if constexpr (_ty_digits <= _impl::reduced_limits<unsigned long>::digits) {
+#if __ABYSS_HAS_BUILTIN(__builtin_ctzl)
+			return __builtin_ctzl(value);
+#endif
+		} else if constexpr (_ty_digits <= _impl::reduced_limits<unsigned long long>::digits) {
+#if __ABYSS_HAS_BUILTIN(__builtin_ctzll)
+			return __builtin_ctzll(value);
+#endif
+		}
+
+		/* fallback/large type impl */
+		std::size_t res{0U};
+		for (std::size_t bit{0U}; bit < _ty_digits; ++bit) {
+			if ((value >> bit) & 1U) {
+				break;
+			}
+			++res;
+		}
+		return res;
+	}
+
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_unsigned_v<_Ty> && std::is_integral_v<_Ty>,
+		std::size_t
+	> countr_one(_Ty value) noexcept {
+		/* Invert the value so we can cheat ant use ctz */
+		return std::countr_zero(_Ty(~value));
+	}
+
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_unsigned_v<_Ty> && std::is_integral_v<_Ty>,
+		_Ty
+	> rotl(_Ty value, const int count) noexcept {
+		constexpr auto _ty_digits{_impl::reduced_limits<_Ty>::digits};
+
+		if (count == 0) {
+			return value;
+		}
+
+		if (count < 0) {
+			/* rotl(value, -count) */
+			return _Ty((value >> -count) | ((value << (_ty_digits + count))));
+		}
+
+		return _Ty((value << count) | ((value >> (_ty_digits - count))));
+	}
+
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_unsigned_v<_Ty> && std::is_integral_v<_Ty>,
+		_Ty
+	> rotr(_Ty value, const int count) noexcept {
+		constexpr auto _ty_digits{_impl::reduced_limits<_Ty>::digits};
+
+		if (count == 0) {
+			return value;
+		}
+
+		if (count < 0) {
+			/* rotr(value, -count) */
+			return _Ty((value << -count) | ((value >> (_ty_digits + count))));
+		}
+
+		return _Ty((value >> count) | ((value << (_ty_digits - count))));
+	}
+
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_unsigned_v<_Ty> && std::is_integral_v<_Ty>,
+		_Ty
+	> bit_ceil(_Ty value) noexcept {
+		constexpr auto _ty_digits{_impl::reduced_limits<_Ty>::digits};
+
+		if (value == 0 || value == 1) {
+			return 1;
+		}
+
+		auto exp_shift{_ty_digits - std::countl_zero(_Ty(value - 1U))};
+
+		/* If we are not subject to integer promotion */
+		if constexpr (std::is_same_v<_Ty, decltype(value << 1U)>) {
+			return _Ty(_Ty(1U) << exp_shift);
+		} else {
+			constexpr auto shift_overflow{(sizeof(decltype(value << 1U)) / sizeof(_Ty)) / 2};
+			exp_shift |= (exp_shift & _ty_digits) << shift_overflow;
+			return _Ty(_Ty(1U) << exp_shift);
+		}
+	}
+
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_unsigned_v<_Ty> && std::is_integral_v<_Ty>,
+		_Ty
+	> bit_floor(_Ty value) noexcept {
+		constexpr auto _ty_digits{_impl::reduced_limits<_Ty>::digits};
+
+		if (value == 0) {
+			return 0;
+		}
+
+		return _Ty(1U << (_ty_digits - std::countl_zero(_Ty(value >> 1U))));
+	}
+
+	template<typename _Ty>
+	[[nodiscard, gnu::always_inline]]
+	constexpr std::enable_if_t<
+		std::is_unsigned_v<_Ty> && std::is_integral_v<_Ty>,
+		std::size_t
+	> bit_width(_Ty value) noexcept {
+		constexpr auto _ty_digits{_impl::reduced_limits<_Ty>::digits};
+
+		return _ty_digits - std::countl_zero(value);
+	}
+}
+
+#endif /* ABYSS_BIT */
+/* vim: set ft=cpp ts=4 sw=4 noexpandtab: */

@@ -12,6 +12,13 @@
 /* General */
 #define __cpp_lib_char8_t 201907L 							/* char8_t support (C++ 20) */
 
+/* Header: bit */
+#define __cpp_lib_endian 201907L							/* std::endian (C++ 20) */
+#define __cpp_lib_bit_cast 201806L							/* std::bit_cast (C++ 20) */
+#define __cpp_lib_byteswap 202110L							/* std::byteswap (C++ 23) */
+#define __cpp_lib_bitops 201907L							/* Bit operations (C++ 20) */
+#define __cpp_lib_int_pow2 202002L                          /* Integral power-of-2 operations (C++ 20) */
+
 /* Header: cstddef */
 #define __cpp_lib_byte 201603L 								/* std::byte (C++ 17) */
 

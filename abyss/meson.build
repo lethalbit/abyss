@@ -2,6 +2,7 @@
 
 # This will be filled out as they're implemented
 abyss_headers = files([
+	'bit',
 	'cfloat',
 	'climits',
 	'cstddef',

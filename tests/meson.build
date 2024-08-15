@@ -9,6 +9,7 @@ endif
 
 
 headers = [
+	'bit',
 	'cfloat',
 	'climits',
 	'cstddef',
