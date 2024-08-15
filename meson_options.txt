@@ -4,41 +4,61 @@ option(
 	value: 'disabled',
 	description: 'Enable RTTI based library components (needs host implementation)'
 )
+
 option(
 	'exception_support',
 	type: 'feature',
 	value: 'disabled',
 	description: 'Enable exception library components (needs host implementation)'
 )
+
 option(
 	'virtual_support',
 	type: 'feature',
 	value: 'disabled',
 	description: 'Enable the use of virtual classes'
 )
+
 option(
 	'cxx23_supplemental',
 	type: 'feature',
 	value: 'disabled',
 	description: 'Enable backported C++23 supplemental headers'
 )
+
 option(
 	'runtime_components',
 	type: 'feature',
 	value: 'disabled',
 	description: 'Enable components that require a runtime implementation'
 )
+
 option(
 	'threading_support',
 	type: 'feature',
 	value: 'disabled',
 	description: 'Enable threading support (requires runtime components)'
 )
+
 option(
 	'extra',
 	type: 'feature',
 	value: 'disabled',
 	description: 'Enable extra, generally useful but not standardized headers'
+)
+
+option(
+	'only_runtime',
+	type: 'feature',
+	value: 'disabled',
+	description: 'When building the runtime is enabled, don\'t install the headers, only the runtime (useful for multiple architecture packages)'
+)
+
+option(
+	'runtime_symlinks',
+	type: 'boolean',
+	value: false,
+	description: 'When building and install the abyss runtime symlink the libraries into $PREFIX/lib'
 )
 
 option(

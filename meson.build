@@ -87,13 +87,15 @@ bin_dir  = pfx_dir / get_option('bindir')
 lib_dir  = pfx_dir / get_option('libdir')
 data_dir = pfx_dir / get_option('datadir')
 
-runtime_enabled    = get_option('runtime_components')
-threading_enabled  = get_option('threading_support').disable_if(not runtime_enabled.allowed())
-rtti_enabled       = get_option('rtti_support').disable_if(not runtime_enabled.allowed())
-exceptions_enabled = get_option('exception_support').disable_if(not runtime_enabled.allowed())
-virtual_enabled    = get_option('virtual_support').disable_if(not runtime_enabled.allowed())
-cxx23_enabled      = get_option('cxx23_supplemental')
-extra_enabled      = get_option('extra')
+runtime_enabled      = get_option('runtime_components')
+threading_enabled    = get_option('threading_support').disable_if(not runtime_enabled.allowed())
+rtti_enabled         = get_option('rtti_support').disable_if(not runtime_enabled.allowed())
+exceptions_enabled   = get_option('exception_support').disable_if(not runtime_enabled.allowed())
+virtual_enabled      = get_option('virtual_support').disable_if(not runtime_enabled.allowed())
+cxx23_enabled        = get_option('cxx23_supplemental')
+extra_enabled        = get_option('extra')
+runtime_symlinks     = get_option('runtime_symlinks')
+install_only_runtime = get_option('only_runtime').disable_if(not runtime_enabled.allowed()).allowed()
 
 subdir('abyss')
 
@@ -108,13 +110,12 @@ if build_benchmarks
 endif
 
 
-if not meson.is_subproject()
+if not meson.is_subproject() and (not install_only_runtime)
 	pkgconfig.generate(
 		subdirs: '.',
 		name: 'abyss',
 		filebase: 'abyss',
 		version: meson.project_version(),
-		extra_cflags: [ feature_defs ],
 		url: 'https://github.com/lethalbit/abyss',
 		description: 'Deeply Embeddable bare-metal C++ standard library'
 	)
@@ -122,6 +123,5 @@ endif
 
 abyss_dep = declare_dependency(
 	include_directories: [ stdlib_include ],
-	compile_args: [ feature_defs ],
 	version: meson.project_version()
 )
