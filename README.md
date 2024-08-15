@@ -52,11 +52,6 @@ There are also some non-standards compliant enhancements, such as making things 
 Abyss is still a very young library, so not much is implemented yet, and everything might not be.
 
 
-
-#### Icon Key
-
-Each header has two sections in it, the first is the status of that header, and the second are any note references that detail conditions or other important details.
-
 <table>
 	<tbody>
 		<tr>
@@ -499,13 +494,16 @@ Each header has two sections in it, the first is the status of that header, and 
 	</tbody>
 </table>
 
+#### Icon Key
+
+Each header has two sections in it, the first is the status of that header, and the second are any note references that detail conditions or other important details.
+
 The key for the first section is as follows:
 
  * :construction: - In progress
  * :white_check_mark: - Completed
  * :hammer_and_wrench: - Planned, not started
  * :x: - Not-planned
-
 
 ## License
 
