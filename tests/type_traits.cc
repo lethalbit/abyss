@@ -1517,8 +1517,8 @@ constexpr bool is_corresponding_member() noexcept {
 }
 
 constexpr bool is_constant_evaluated() noexcept {
-
-	return true;
+	/* ¯\_(ツ)_/¯ */
+	return std::is_constant_evaluated();
 }
 
 
