@@ -194,7 +194,12 @@ namespace test {
 		AP(const AP&) {
 			throw foo;
 		}
+	};
 
+	struct AQ {
+		AQ(const AQ&&) {
+			throw false;
+		}
 	};
 
 	int bar();
@@ -1160,6 +1165,13 @@ constexpr bool is_nothrow_copy_constructible() noexcept {
 }
 
 constexpr bool is_move_constructible() noexcept {
+
+	/* BUG(aki): Needs more robust tests */
+	static_assert(std::is_move_constructible_v<test::A>);
+	static_assert(std::is_move_constructible_v<test::P>);
+	static_assert(std::is_move_constructible_v<test::AQ>);
+	static_assert(!std::is_move_constructible_v<test::AA>);
+	static_assert(!std::is_move_constructible_v<test::AA>);
 
 	return true;
 }
