@@ -177,6 +177,18 @@ namespace test {
 		virtual void nya() = 0;
 	};
 
+	struct AM {
+		int foo;
+		float bar;
+	};
+
+	struct AN {
+		int baz;
+		float qux;
+	};
+
+	struct AO: AM, AN { };
+
 	int bar();
 
 	template<typename> struct SU_traits {};
@@ -1512,6 +1524,13 @@ constexpr bool is_pointer_interconvertible_with_class() noexcept {
 }
 
 constexpr bool is_corresponding_member() noexcept {
+
+	/* NOTE(aki): Clang is lacking support for the compilers internals to support this */
+#if !defined(__clang__)
+	static_assert(std::is_corresponding_member(&test::AM::foo, &test::AN::baz));
+	static_assert(std::is_corresponding_member(&test::AM::bar, &test::AN::qux));
+	static_assert(std::is_corresponding_member(&test::AO::foo, &test::AO::baz));
+#endif
 
 	return true;
 }
