@@ -202,6 +202,11 @@ namespace test {
 		}
 	};
 
+	struct AR {
+		AR &operator =(const AR &) { throw false; };
+		AR &operator =(AR &&) { throw false; };
+	};
+
 	int bar();
 
 	template<typename> struct SU_traits {};
@@ -1231,6 +1236,17 @@ constexpr bool is_trivially_assignable() noexcept {
 }
 
 constexpr bool is_nothrow_assignable() noexcept {
+
+	/* BUG(aki): Needs more robust tests */
+	static_assert(std::is_nothrow_assignable_v<int&, int>);
+	static_assert(std::is_nothrow_assignable_v<int&, const int>);
+	static_assert(std::is_nothrow_assignable_v<int&, int&>);
+	static_assert(std::is_nothrow_assignable_v<int&, const int&>);
+	static_assert(std::is_nothrow_assignable_v<int&, double>);
+	static_assert(!std::is_nothrow_assignable_v<int, int>);
+	static_assert(!std::is_nothrow_assignable_v<const int&, int>);
+	static_assert(!std::is_nothrow_assignable_v<test::N&, test::N>);
+	static_assert(!std::is_nothrow_assignable_v<test::AR&, test::AR>);
 
 	return true;
 }
