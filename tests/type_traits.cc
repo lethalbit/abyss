@@ -189,6 +189,14 @@ namespace test {
 
 	struct AO: AM, AN { };
 
+	struct AP {
+		int foo;
+		AP(const AP&) {
+			throw foo;
+		}
+
+	};
+
 	int bar();
 
 	template<typename> struct SU_traits {};
@@ -1119,6 +1127,7 @@ constexpr bool is_copy_constructible() noexcept {
 	static_assert(std::is_copy_constructible_v<test::A>);
 	static_assert(std::is_copy_constructible_v<test::P>);
 	static_assert(std::is_copy_constructible_v<test::AA>);
+	static_assert(std::is_copy_constructible_v<test::AP>);
 	static_assert(!std::is_copy_constructible_v<test::N>);
 	static_assert(!std::is_copy_constructible_v<test::O>);
 
@@ -1133,11 +1142,19 @@ constexpr bool is_trivially_copy_constructible() noexcept {
 	static_assert(std::is_trivially_copy_constructible_v<test::AA>);
 	static_assert(!std::is_trivially_copy_constructible_v<test::N>);
 	static_assert(!std::is_trivially_copy_constructible_v<test::O>);
+	static_assert(!std::is_trivially_copy_constructible_v<test::AP>);
 
 	return true;
 }
 
 constexpr bool is_nothrow_copy_constructible() noexcept {
+
+	/* BUG(aki): Needs more robust tests */
+	static_assert(std::is_nothrow_copy_constructible_v<test::A>);
+	static_assert(std::is_nothrow_copy_constructible_v<test::P>);
+	static_assert(std::is_nothrow_copy_constructible_v<test::AA>);
+	static_assert(!std::is_nothrow_copy_constructible_v<test::O>);
+	static_assert(!std::is_nothrow_copy_constructible_v<test::AP>);
 
 	return true;
 }
