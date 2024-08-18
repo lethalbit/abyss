@@ -197,6 +197,9 @@ namespace test {
 
 	struct SU_is_empty_v { static int bar; };
 
+
+	template<typename T, typename... Ts>
+	constexpr bool same_types = std::conjunction_v<std::is_same<T, Ts>...>;
 }
 
 
@@ -1501,6 +1504,11 @@ constexpr bool unwrap_ref_decay() noexcept {
 }
 
 constexpr bool conjunction() noexcept {
+
+	/* BUG(aki): Needs more robust tests */
+	static_assert(test::same_types<int, int, int>);
+	static_assert(!test::same_types<int, int&, int>);
+	static_assert(!test::same_types<int, float, void>);
 
 	return true;
 }
