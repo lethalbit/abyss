@@ -1507,6 +1507,10 @@ constexpr bool conjunction() noexcept {
 
 constexpr bool disjunction() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+	static_assert(std::disjunction_v<std::true_type, std::true_type, std::void_t<>>);
+	static_assert(std::disjunction_v<std::false_type, std::true_type, std::void_t<>>);
+
 	return true;
 }
 
