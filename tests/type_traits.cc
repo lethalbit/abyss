@@ -1217,6 +1217,16 @@ constexpr bool is_assignable() noexcept {
 
 constexpr bool is_trivially_assignable() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+	static_assert(std::is_trivially_assignable_v<int&, int>);
+	static_assert(std::is_trivially_assignable_v<int&, const int>);
+	static_assert(std::is_trivially_assignable_v<int&, int&>);
+	static_assert(std::is_trivially_assignable_v<int&, const int&>);
+	static_assert(std::is_trivially_assignable_v<int&, double>);
+	static_assert(!std::is_trivially_assignable_v<int, int>);
+	static_assert(!std::is_trivially_assignable_v<const int&, int>);
+	static_assert(!std::is_trivially_assignable_v<test::A&, double>);
+
 	return true;
 }
 
