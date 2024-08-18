@@ -1202,6 +1202,16 @@ constexpr bool is_nothrow_move_constructible() noexcept {
 
 constexpr bool is_assignable() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+	static_assert(std::is_assignable_v<int&, int>);
+	static_assert(std::is_assignable_v<int&, const int>);
+	static_assert(std::is_assignable_v<int&, int&>);
+	static_assert(std::is_assignable_v<int&, const int&>);
+	static_assert(std::is_assignable_v<test::A&, test::A>);
+	static_assert(!std::is_assignable_v<int, int>);
+	static_assert(!std::is_assignable_v<const int&, int>);
+	static_assert(!std::is_assignable_v<test::A&, double>);
+
 	return true;
 }
 
