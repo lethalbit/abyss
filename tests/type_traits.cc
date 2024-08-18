@@ -1520,6 +1520,11 @@ constexpr bool negation() noexcept {
 
 constexpr bool is_pointer_interconvertible_with_class() noexcept {
 
+	/* NOTE(aki): Clang is lacking support for the compilers internals to support this */
+#if !defined(__clang__)
+	static_assert(std::is_pointer_interconvertible_with_class(&test::AM::foo));
+#endif
+
 	return true;
 }
 
