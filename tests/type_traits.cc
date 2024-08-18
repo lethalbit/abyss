@@ -1127,6 +1127,13 @@ constexpr bool is_copy_constructible() noexcept {
 
 constexpr bool is_trivially_copy_constructible() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+	static_assert(std::is_trivially_copy_constructible_v<test::A>);
+	static_assert(std::is_trivially_copy_constructible_v<test::P>);
+	static_assert(std::is_trivially_copy_constructible_v<test::AA>);
+	static_assert(!std::is_trivially_copy_constructible_v<test::N>);
+	static_assert(!std::is_trivially_copy_constructible_v<test::O>);
+
 	return true;
 }
 
