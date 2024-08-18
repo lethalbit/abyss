@@ -840,7 +840,7 @@ namespace std {
 #if __has_builtin(__builtin_is_pointer_interconvertible_with_class)
 	/* XXX(aki): This relies on a GCC builtin  */
 	template<typename _Ty, typename _M>
-	[[noexcept, gnu::always_inline]]
+	[[nodiscard, gnu::always_inline]]
 	constexpr bool is_pointer_interconvertible_with_class(_M _Ty::* _mp) noexcept {
 		return __builtin_is_pointer_interconvertible_with_class(_mp);
 	}
@@ -851,14 +851,14 @@ namespace std {
 #if __has_builtin(__builtin_is_corresponding_member)
 	/* XXX(aki): This relies on a GCC builtin  */
 	template<typename _Ty1, typename _Ty2, typename _M1, typename _M2>
-	[[noexcept, gnu::always_inline]]
+	[[nodiscard, gnu::always_inline]]
 	constexpr bool is_corresponding_member(_M1 _Ty1::* _mp1, _M2 _Ty2::* _mp2) noexcept {
 		return __builtin_is_corresponding_member(_mp1, _mp2);
 	}
 #endif
 
 	/* XXX(aki): This relies on a GCC builtin  */
-	[[noexcept, gnu::always_inline]]
+	[[nodiscard, gnu::always_inline]]
 	constexpr bool is_constant_evaluated() noexcept {
 		return __builtin_is_constant_evaluated();
 	}
