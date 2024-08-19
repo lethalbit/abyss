@@ -3,7 +3,10 @@
 #if !defined(ABYSS_VERSION)
 #define ABYSS_VERSION
 
+#include <abyss/cosmogony/compiler_support.hh>
 #include <abyss/cosmogony/library_config.hh>
+
+__ABYSS_SYSTEM_HEADER()
 
 /* NOTE(aki): This will mostly be not-done until more things are fleshed out */
 
