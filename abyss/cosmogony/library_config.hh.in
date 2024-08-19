@@ -3,14 +3,15 @@
 #if !defined(ABYSS_COSMOGONY_LIBRARY_CONFIG)
 #define ABYSS_COSMOGONY_LIBRARY_CONFIG
 
-#include <abyss/cosmogony/compiler_support.hh>
-
-__ABYSS_SYSTEM_HEADER()
-
 /* /!\ ACHTUNG /!\ ACHTUNG /!\ ACHTUNG /!\ ACHTUNG /!\ ACHTUNG /!\ */
 /*      THIS IS AN INTERNAL HEADER, DON'T INCLUDE IT DIRECTLY      */
 
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
+
+/* NOTE(aki): We unilaterally declare this a system header because it's harmless */
+#if defined(__GNUG__) || defined(__clang__)
+#	pragma GCC system_header
+#endif
 
 #mesondefine ABYSS_VIRTUAL_SUPPORT
 #mesondefine ABYSS_RUNTIME_SUPPORT
@@ -19,6 +20,8 @@ __ABYSS_SYSTEM_HEADER()
 #mesondefine ABYSS_EXCEPTION_SUPPORT
 #mesondefine ABYSS_STD23_SUPPLEMENTAL
 #mesondefine ABYSS_EXTRA
+
+#mesondefine __ABYSS_ENABLE_SYSTEM_HEADERS
 
 // NOLINTEND(cppcoreguidelines-macro-usage)
 

@@ -8,7 +8,14 @@
 
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
 
-#if defined(__GNUG__) || defined(__clang__)
+#include <abyss/cosmogony/library_config.hh>
+
+/* NOTE(aki): We don't enable this for now, we want to see compiler diagnostics */
+#if !defined(__ABYSS_ENABLE_SYSTEM_HEADERS)
+#	define __ABYSS_ENABLE_SYSTEM_HEADERS 0
+#endif
+
+#if (defined(__GNUG__) || defined(__clang__)) && defined(__ABYSS_ENABLE_SYSTEM_HEADERS)
 #	pragma GCC system_header
 #endif
 
@@ -51,10 +58,6 @@
 	__ABYSS_DIAGNOSTICS_IGNORE(DIAG_NAME)
 
 
-/* NOTE(aki): We don't enable this for now, we want to see compiler diagnostics */
-#if !defined(__ABYSS_ENABLE_SYSTEM_HEADERS)
-#	define __ABYSS_ENABLE_SYSTEM_HEADERS 0
-#endif
 
 #if (defined(__GNUG__) || defined(__clang__)) && __ABYSS_ENABLE_SYSTEM_HEADERS
 #	define __ABYSS_SYSTEM_HEADER() __ABYSS_PRAGMA(GCC system_header)
