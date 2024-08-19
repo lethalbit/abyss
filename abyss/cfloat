@@ -3,6 +3,10 @@
 #if !defined(ABYSS_CFLOAT)
 #define ABYSS_CFLOAT
 
+#include <abyss/cosmogony/compiler_support.hh>
+
+__ABYSS_SYSTEM_HEADER()
+
 /* XXX(aki): This relies on a GCC builtin  */
 #undef FLT_RADIX
 #define FLT_RADIX __FLT_RADIX__
