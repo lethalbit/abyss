@@ -3,6 +3,10 @@
 #if !defined(ABYSS_SOURCE_LOCATION)
 #define ABYSS_SOURCE_LOCATION
 
+#include <abyss/cosmogony/compiler_support.hh>
+
+__ABYSS_SYSTEM_HEADER()
+
 namespace std {
 	struct source_location {
 	private:
