@@ -11,6 +11,8 @@
 /* NOTE(aki): This is not purely standards compliant as instances of return values of `int` */
 /*            where the result should not be negative have been replaced with `size_t`.     */
 
+__ABYSS_SYSTEM_HEADER()
+
 namespace std {
 	namespace _impl {
 		template<typename _Ty>
