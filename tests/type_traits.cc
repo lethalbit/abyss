@@ -213,6 +213,9 @@ namespace test {
 
 	int bar();
 
+	template<bool b>
+	constexpr std::enable_if_t<b, bool> enable_if_works() noexcept { return true; }
+
 	template<typename> struct SU_traits {};
 	template<class T, class U> struct SU_traits<U T::*>
 		{ using member_type = U; };
@@ -1560,6 +1563,7 @@ constexpr bool remove_cvref() noexcept {
 constexpr bool enable_if() noexcept {
 
 	/* BUG(aki): Annoying to test  */
+	static_assert(test::enable_if_works<true>());
 
 	return true;
 }
