@@ -1377,6 +1377,16 @@ constexpr bool alignment_of() noexcept {
 
 constexpr bool rank() noexcept {
 
+	// NOLINTBEGIN(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+
+	static_assert(std::rank_v<int> == 0U);
+	static_assert(std::rank_v<int[1]> == 1U);
+	static_assert(std::rank_v<int[1][2]> == 2U);
+	static_assert(std::rank_v<int[1][2][3]> == 3U);
+	static_assert(std::rank_v<int[1][2][3][4]> == 4U);
+
+	// NOLINTEND(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+
 	return true;
 }
 

@@ -696,13 +696,13 @@ namespace std {
 	inline constexpr std::size_t alignment_of_v = alignment_of<_Ty>::value;
 
 	template<typename _Ty>
-	struct rank : integral_constant<std::size_t, 0> {};
+	struct rank : integral_constant<std::size_t, 0U> {};
 	template<typename _Ty>
 	// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-	struct rank<_Ty[]> : integral_constant<std::size_t, rank<_Ty>::value + 1> {};
+	struct rank<_Ty[]> : integral_constant<std::size_t, rank<_Ty>::value + 1U> {};
 	template<typename _Ty, std::size_t N>
 	// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-	struct rank<_Ty[N]> : integral_constant<std::size_t, rank<_Ty>::value + 1> {};
+	struct rank<_Ty[N]> : integral_constant<std::size_t, rank<_Ty>::value + 1U> {};
 	template<typename _Ty>
 	inline constexpr std::size_t rank_v = rank<_Ty>::value;
 
