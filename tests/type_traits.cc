@@ -207,6 +207,10 @@ namespace test {
 		AR &operator =(AR &&) { throw false; };
 	};
 
+	struct AS {
+		~AS() noexcept {};
+	};
+
 	int bar();
 
 	template<typename> struct SU_traits {};
@@ -1318,6 +1322,21 @@ constexpr bool is_trivially_destructible() noexcept {
 }
 
 constexpr bool is_nothrow_destructible() noexcept {
+
+	/* BUG(aki): Needs more robust tests */
+	static_assert(std::is_nothrow_destructible_v<test::A>);
+	static_assert(std::is_nothrow_destructible_v<test::P>);
+	static_assert(std::is_nothrow_destructible_v<int>);
+	static_assert(std::is_nothrow_destructible_v<const int>);
+	static_assert(std::is_nothrow_destructible_v<const volatile int>);
+	static_assert(std::is_nothrow_destructible_v<int&>);
+	static_assert(std::is_nothrow_destructible_v<const int&>);
+	static_assert(std::is_nothrow_destructible_v<const volatile int&>);
+	static_assert(std::is_nothrow_destructible_v<test::AS>);
+	static_assert(!std::is_nothrow_destructible_v<void>);
+	static_assert(!std::is_nothrow_destructible_v<void()>);
+	 // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+	static_assert(!std::is_nothrow_destructible_v<int[]>);
 
 	return true;
 }

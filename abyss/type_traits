@@ -864,6 +864,40 @@ namespace std {
 	template<typename _Ty>
 	inline constexpr bool is_trivially_destructible_v = is_trivially_destructible<_Ty>::value;
 
+#if __ABYSS_HAS_BUILTIN(__is_nothrow_destructible)
+	template<typename _Ty>
+	struct is_nothrow_destructible : bool_constant<__is_nothrow_destructible(_Ty)> {};
+#else
+	namespace _impl {
+		template<typename _Ty, bool = noexcept(_impl::declval<_Ty&>().~_Ty())>
+		constexpr auto _try_is_nothrow_destructible(int) -> true_type;
+		template<typename>
+		constexpr auto _try_is_nothrow_destructible(...) -> false_type;
+
+		template<
+			typename _Ty,
+			bool = (is_void_v<_Ty> || is_unbounded_array_v<_Ty> || is_function_v<_Ty>),
+			bool = (is_reference_v<_Ty> || is_scalar_v<_Ty>)
+		>
+		struct _is_nothrow_destructible;
+
+		template<typename _Ty>
+		struct _is_nothrow_destructible<_Ty, false, false> : decltype(
+			_impl::_try_is_nothrow_destructible<remove_all_extents_t<_Ty>>(0)
+		) {};
+
+		template<typename _Ty>
+		struct _is_nothrow_destructible<_Ty, true, false> : false_type {};
+
+		template<typename _Ty>
+		struct _is_nothrow_destructible<_Ty, false, true> : true_type {};
+	}
+	template<typename _Ty>
+	struct is_nothrow_destructible : _impl::_is_nothrow_destructible<_Ty> {};
+#endif
+	template<typename _Ty>
+	inline constexpr bool is_nothrow_destructible_v = is_nothrow_destructible<_Ty>::value;
+
 
 	/* TODO(aki): common_type */
 	/* TODO(aki): {,basic_}common_reference */
