@@ -6,6 +6,8 @@
 #include <abyss/cosmogony/fundamental.hh>
 #include <abyss/cosmogony/compiler_support.hh>
 
+__ABYSS_SYSTEM_HEADER()
+
 // Silly clang-tidy, we're the ones defining the traits
 // NOLINTBEGIN(modernize-type-traits)
 namespace std {
