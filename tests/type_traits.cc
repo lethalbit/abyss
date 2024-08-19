@@ -1297,6 +1297,7 @@ constexpr bool is_destructible() noexcept {
 	static_assert(std::is_destructible_v<const volatile int&>);
 	static_assert(!std::is_destructible_v<void>);
 	static_assert(!std::is_destructible_v<void()>);
+	// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 	static_assert(!std::is_destructible_v<int[]>);
 
 	return true;
