@@ -203,15 +203,15 @@ namespace std {
 
 		if constexpr (_ty_digits <= _impl::reduced_limits<unsigned int>::digits) {
 #if __ABYSS_HAS_BUILTIN(__builtin_clz)
-			return __builtin_clz(value);
+			return std::size_t(__builtin_clz(value));
 #endif
 		} else if constexpr (_ty_digits <= _impl::reduced_limits<unsigned long>::digits) {
 #if __ABYSS_HAS_BUILTIN(__builtin_clzl)
-			return __builtin_clzl(value);
+			return std::size_t(__builtin_clzl(value));
 #endif
 		} else if constexpr (_ty_digits <= _impl::reduced_limits<unsigned long long>::digits) {
 #if __ABYSS_HAS_BUILTIN(__builtin_clzll)
-			return __builtin_clzll(value);
+			return std::size_t(__builtin_clzll(value));
 #endif
 		}
 
@@ -251,15 +251,15 @@ namespace std {
 
 		if constexpr (_ty_digits <= _impl::reduced_limits<unsigned int>::digits) {
 #if __ABYSS_HAS_BUILTIN(__builtin_ctz)
-			return __builtin_ctz(value);
+			return std::size_t(__builtin_ctz(value));
 #endif
 		} else if constexpr (_ty_digits <= _impl::reduced_limits<unsigned long>::digits) {
 #if __ABYSS_HAS_BUILTIN(__builtin_ctzl)
-			return __builtin_ctzl(value);
+			return std::size_t(__builtin_ctzl(value));
 #endif
 		} else if constexpr (_ty_digits <= _impl::reduced_limits<unsigned long long>::digits) {
 #if __ABYSS_HAS_BUILTIN(__builtin_ctzll)
-			return __builtin_ctzll(value);
+			return std::size_t(__builtin_ctzll(value));
 #endif
 		}
 
