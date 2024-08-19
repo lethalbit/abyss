@@ -1392,6 +1392,17 @@ constexpr bool rank() noexcept {
 
 constexpr bool extent() noexcept {
 
+	// NOLINTBEGIN(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+
+	static_assert(std::extent_v<int> == 0U);
+	static_assert(std::extent_v<int[8]> == 8U);
+	static_assert(std::extent_v<int[2][4]> == 2U);
+	static_assert(std::extent_v<int[2][4], 0U> == 2U);
+	static_assert(std::extent_v<int[2][4], 1U> == 4U);
+	static_assert(std::extent_v<int[2][4], 3U> == 0U);
+
+	// NOLINTEND(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+
 	return true;
 }
 
