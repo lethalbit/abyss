@@ -1300,6 +1300,20 @@ constexpr bool is_destructible() noexcept {
 
 constexpr bool is_trivially_destructible() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+	static_assert(std::is_trivially_destructible_v<test::A>);
+	static_assert(std::is_trivially_destructible_v<test::P>);
+	static_assert(std::is_trivially_destructible_v<int>);
+	static_assert(std::is_trivially_destructible_v<const int>);
+	static_assert(std::is_trivially_destructible_v<const volatile int>);
+	static_assert(std::is_trivially_destructible_v<int&>);
+	static_assert(std::is_trivially_destructible_v<const int&>);
+	static_assert(std::is_trivially_destructible_v<const volatile int&>);
+	static_assert(!std::is_trivially_destructible_v<void>);
+	static_assert(!std::is_trivially_destructible_v<void()>);
+	 // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+	static_assert(!std::is_trivially_destructible_v<int[]>);
+
 	return true;
 }
 
