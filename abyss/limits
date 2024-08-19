@@ -3,6 +3,9 @@
 #if !defined(ABYSS_LIMITS)
 #define ABYSS_LIMITS
 
+#include <abyss/cosmogony/compiler_support.hh>
+
+__ABYSS_SYSTEM_HEADER()
 
 namespace std {
 	namespace _impl {
