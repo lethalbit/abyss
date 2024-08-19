@@ -1260,30 +1260,48 @@ constexpr bool is_nothrow_assignable() noexcept {
 
 constexpr bool is_copy_assignable() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+
+
 	return true;
 }
 
 constexpr bool is_trivially_copy_assignable() noexcept {
+
+	/* BUG(aki): Needs more robust tests */
+
 
 	return true;
 }
 
 constexpr bool is_nothrow_copy_assignable() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+
+
 	return true;
 }
 
 constexpr bool is_move_assignable() noexcept {
+
+	/* BUG(aki): Needs more robust tests */
+
 
 	return true;
 }
 
 constexpr bool is_trivially_move_assignable() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+
+
 	return true;
 }
 
 constexpr bool is_nothrow_move_assignable() noexcept {
+
+	/* BUG(aki): Needs more robust tests */
+
 
 	return true;
 }
@@ -1371,6 +1389,15 @@ constexpr bool is_nothrow_swappable() noexcept {
 }
 
 constexpr bool alignment_of() noexcept {
+
+	/* BUG(aki): These tests are stupidly fragile */
+	static_assert(std::alignment_of_v<int>  == 4U);
+	static_assert(std::alignment_of_v<long> == 8U);
+	static_assert(std::alignment_of_v<test::Z> == 4U);
+	static_assert(std::alignment_of_v<int> == std::alignment_of_v<unsigned int>);
+	static_assert(std::alignment_of_v<const int> == std::alignment_of_v<int>);
+	static_assert(std::alignment_of_v<volatile int> == std::alignment_of_v<int>);
+	static_assert(std::alignment_of_v<const volatile int> == std::alignment_of_v<int>);
 
 	return true;
 }
