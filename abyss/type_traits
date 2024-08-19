@@ -15,7 +15,7 @@ namespace std {
 		using type = _T;
 	};
 	template<typename _T>
-	using type_identity_t = typename type_identity<_T>::type;
+	using type_identity_t = type_identity<_T>::type;
 
 	template<typename...>
 	using void_t = void;
@@ -49,7 +49,7 @@ namespace std {
 	template<typename _Ty>
 	struct enable_if<true, _Ty> { using type = _Ty; };
 	template<bool _BVal, typename _Ty = void>
-	using enable_if_t = typename enable_if<_BVal, _Ty>::type;
+	using enable_if_t = enable_if<_BVal, _Ty>::type;
 
 
 	template<bool _Bval, typename _True, typename _False>
@@ -57,7 +57,7 @@ namespace std {
 	template<typename _True, typename _False>
 	struct conditional<false, _True, _False> { using type = _False; };
 	template<bool _Bval, typename _True, typename _False>
-	using conditional_t = typename conditional<_Bval, _True, _False>::type;
+	using conditional_t = conditional<_Bval, _True, _False>::type;
 
 	/* TODO(aki): Needs to be made more robust */
 	template<typename...>
@@ -93,36 +93,36 @@ namespace std {
 	template<typename _Ty>
 	struct remove_cv<const volatile _Ty> { using type = _Ty; };
 	template<typename _Ty>
-	using remove_cv_t = typename remove_cv<_Ty>::type;
+	using remove_cv_t = remove_cv<_Ty>::type;
 
 	template<typename _Ty>
 	struct remove_const { using type = _Ty; };
 	template<typename _Ty>
 	struct remove_const<const _Ty> { using type = _Ty; };
 	template<typename _Ty>
-	using remove_const_t = typename remove_const<_Ty>::type;
+	using remove_const_t = remove_const<_Ty>::type;
 
 	template<typename _Ty>
 	struct remove_volatile { using type = _Ty; };
 	template<typename _Ty>
 	struct remove_volatile<volatile _Ty> { using type = _Ty; };
 	template<typename _Ty>
-	using remove_volatile_t = typename remove_volatile<_Ty>::type;
+	using remove_volatile_t = remove_volatile<_Ty>::type;
 
 	template<typename _Ty>
 	struct add_cv { using type = const volatile _Ty; };
 	template<typename _Ty>
-	using add_cv_t = typename add_cv<_Ty>::type;
+	using add_cv_t = add_cv<_Ty>::type;
 
 	template<typename _Ty>
 	struct add_const { using type = const _Ty; };
 	template<typename _Ty>
-	using add_const_t = typename add_const<_Ty>::type;
+	using add_const_t = add_const<_Ty>::type;
 
 	template<typename _Ty>
 	struct add_volatile { using type = volatile _Ty; };
 	template<typename _Ty>
-	using add_volatile_t = typename add_volatile<_Ty>::type;
+	using add_volatile_t = add_volatile<_Ty>::type;
 
 
 	template<typename _Ty>
@@ -147,7 +147,7 @@ namespace std {
 	template<typename _Ty>
 	struct remove_reference<_Ty&&> { using type = _Ty; };
 	template<typename _Ty>
-	using remove_reference_t = typename remove_reference<_Ty>::type;
+	using remove_reference_t = remove_reference<_Ty>::type;
 
 	namespace _impl {
 		template<typename _Ty>
@@ -164,12 +164,12 @@ namespace std {
 	template<typename _Ty>
 	struct add_lvalue_reference : decltype(_impl::_try_add_lvalue_reference<_Ty>(0)) {};
 	template<typename _Ty>
-	using add_lvalue_reference_t = typename add_lvalue_reference<_Ty>::type;
+	using add_lvalue_reference_t = add_lvalue_reference<_Ty>::type;
 
 	template<typename _Ty>
 	struct add_rvalue_reference : decltype(_impl::_try_add_rvalue_reference<_Ty>(0)) {};
 	template<typename _Ty>
-	using add_rvalue_reference_t = typename add_rvalue_reference<_Ty>::type;
+	using add_rvalue_reference_t = add_rvalue_reference<_Ty>::type;
 
 
 	namespace _impl {
@@ -182,7 +182,7 @@ namespace std {
 	template<typename _Ty>
 	struct remove_cvref : type_identity<remove_cv_t<remove_reference_t<_Ty>>> {};
 	template<typename _Ty>
-	using remove_cvref_t = typename remove_cvref<_Ty>::type;
+	using remove_cvref_t = remove_cvref<_Ty>::type;
 
 	template<typename _Ty>
 	struct remove_pointer { using type = _Ty; };
@@ -195,7 +195,7 @@ namespace std {
 	template<typename _Ty>
 	struct remove_pointer<_Ty* const volatile> { using type = _Ty; };
 	template<typename _Ty>
-	using remove_pointer_t = typename remove_pointer<_Ty>::type;
+	using remove_pointer_t = remove_pointer<_Ty>::type;
 
 	namespace _impl {
 		template<typename _Ty>
@@ -207,7 +207,7 @@ namespace std {
 	template<typename _Ty>
 	struct add_pointer: decltype(_impl::_try_add_pointer<_Ty>(0)) {};
 	template<typename _Ty>
-	using add_pointer_t = typename add_pointer<_Ty>::type;
+	using add_pointer_t = add_pointer<_Ty>::type;
 
 
 	template<typename _Ty>
@@ -541,7 +541,7 @@ namespace std {
 	namespace _impl {
 		template<typename _Ty, std::size_t = sizeof(_Ty)>
 		constexpr true_type _is_complete_or_unbounded(type_identity<_Ty>) { return {}; }
-		template<typename _Ti, typename _Nt = typename _Ti::type>
+		template<typename _Ti, typename _Nt = _Ti::type>
 		constexpr typename disjunction<is_reference<_Ti>, is_function<_Ti>, is_void<_Ti>, is_unbounded_array<_Ti>>::type
 		_is_complete_or_unbounded(_Ti) { return {}; }
 	}
@@ -767,18 +767,18 @@ namespace std {
 	// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 	struct remove_extent<_Ty[N]> { using type = _Ty; };
 	template<typename _Ty>
-	using remove_extent_t = typename remove_extent<_Ty>::type;
+	using remove_extent_t = remove_extent<_Ty>::type;
 
 	template<typename _Ty>
 	struct remove_all_extents { using type = _Ty; };
 	template<typename _Ty>
 	// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-	struct remove_all_extents<_Ty[]> { using type = typename remove_all_extents<_Ty>::type; };
+	struct remove_all_extents<_Ty[]> { using type = remove_all_extents<_Ty>::type; };
 	template<typename _Ty, std::size_t N>
 	// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-	struct remove_all_extents<_Ty[N]> { using type = typename remove_all_extents<_Ty>::type; };
+	struct remove_all_extents<_Ty[N]> { using type = remove_all_extents<_Ty>::type; };
 	template<typename _Ty>
-	using remove_all_extents_t = typename remove_all_extents<_Ty>::type;
+	using remove_all_extents_t = remove_all_extents<_Ty>::type;
 
 	/* TODO(aki): This feels wrong, needs testing */
 	namespace _impl {
@@ -795,7 +795,7 @@ namespace std {
 		struct type { alignas(Align) unsigned char data[Len]; };
 	};
 	template<std::size_t Len, std::size_t Align = alignof(typename _impl::_aligned_storage<Len>::_type)>
-	using aligned_storage_t = typename aligned_storage<Len, Align>::type;
+	using aligned_storage_t = aligned_storage<Len, Align>::type;
 
 	/* TODO(aki): aligned_union */
 
@@ -816,7 +816,9 @@ namespace std {
 		>;
 	};
 	template<typename _Ty>
-	using decay_t = typename decay<_Ty>::type;
+	using decay_t = decay<_Ty>::type;
+
+
 
 	/* TODO(aki): common_type */
 	/* TODO(aki): {,basic_}common_reference */
@@ -827,7 +829,7 @@ namespace std {
 	template<typename _Ty>
 	struct underlying_type<_Ty, false> {};
 	template<typename _Ty>
-	using underlying_type_t = typename underlying_type<_Ty>::type;
+	using underlying_type_t = underlying_type<_Ty>::type;
 
 	/* TODO(aki): result_of */
 	/* TODO(aki): invoke_result */
