@@ -3,6 +3,10 @@
 #if !defined(ABYSS_CSTDINT)
 #define ABYSS_CSTDINT
 
+#include <abyss/cosmogony/compiler_support.hh>
+
+__ABYSS_SYSTEM_HEADER()
+
 #undef INT8_MAX
 #undef INT8_MIN
 #if defined(__INT8_MAX__)
