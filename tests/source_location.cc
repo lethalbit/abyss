@@ -8,7 +8,10 @@ int main(int, char**) {
 	constexpr auto loc{std::source_location::current()};
 
 	static_assert(loc.line() == 8);
-#if defined(__clang__)
+#if __ABYSS_DEBUG_FALLBACK_IMPLS
+	/* NOTE(aki): We don't get column information in our fallback impl */
+	static_assert(loc.column() == 0);
+#elif defined(__clang__)
 	/* Clang defines it from the identifier assignment, not the invocation point */
 	static_assert(loc.column() == 21);
 #elif defined(__GNUG__)

@@ -11,7 +11,7 @@ namespace std {
 	struct source_location {
 	private:
 		using line_col_t = __UINT_LEAST32_TYPE__;
-#if __has_builtin(__builtin_source_location)
+#if __ABYSS_HAS_BUILTIN(__builtin_source_location)
 		/* XXX(aki): this is just to make `__builtin_source_location` happy, we don't use it */
 		struct __impl {
 			const char* _M_file_name;
@@ -27,7 +27,7 @@ namespace std {
 		line_col_t _col{};
 
 	public:
-#if __has_builtin(__builtin_source_location)
+#if __ABYSS_HAS_BUILTIN(__builtin_source_location)
 		[[nodiscard]]
 		static consteval source_location current(builtin_ret_t _loc = __builtin_source_location()) noexcept {
 			source_location ret{};
