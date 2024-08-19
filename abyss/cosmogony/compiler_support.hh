@@ -8,6 +8,10 @@
 
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
 
+#if defined(__GNUG__) || defined(__clang__)
+#	pragma GCC system_header
+#endif
+
 /* This allows us to run tests on any fallback implementations we have as well */
 #if !defined(__ABYSS_DEBUG_FALLBACK_IMPLS)
 #	define __ABYSS_DEBUG_FALLBACK_IMPLS 0
@@ -46,6 +50,17 @@
 	__ABYSS_DIAGNOSTICS_PUSH()						\
 	__ABYSS_DIAGNOSTICS_IGNORE(DIAG_NAME)
 
+
+/* NOTE(aki): We don't enable this for now, we want to see compiler diagnostics */
+#if !defined(__ABYSS_ENABLE_SYSTEM_HEADERS)
+#	define __ABYSS_ENABLE_SYSTEM_HEADERS 0
+#endif
+
+#if (defined(__GNUG__) || defined(__clang__)) && __ABYSS_ENABLE_SYSTEM_HEADERS
+#	define __ABYSS_SYSTEM_HEADER() __ABYSS_PRAGMA(GCC system_header)
+#else
+#	define __ABYSS_SYSTEM_HEADER()
+#endif
 
 // NOLINTEND(cppcoreguidelines-macro-usage)
 
