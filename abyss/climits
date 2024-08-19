@@ -4,6 +4,10 @@
 #if !defined(ABYSS_CLIMITS)
 #define ABYSS_CLIMITS
 
+#include <abyss/cosmogony/compiler_support.hh>
+
+__ABYSS_SYSTEM_HEADER()
+
 #if !defined(MB_LEN_MAX)
 #	define MB_LEN_MAX 1
 #endif
