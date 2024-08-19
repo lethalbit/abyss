@@ -3,7 +3,11 @@
 #if !defined(ABYSS_CSTDDEF)
 #define ABYSS_CSTDDEF
 
+
+#include <abyss/cosmogony/compiler_support.hh>
 #include <abyss/cosmogony/fundamental.hh>
+
+__ABYSS_SYSTEM_HEADER()
 
 #undef NULL
 /* Before you complain about this, see [support.types.nullptr] https://eel.is/c++draft/support.types.nullptr#2 */
