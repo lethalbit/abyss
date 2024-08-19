@@ -3,6 +3,10 @@
 #if !defined(ABYSS_COSMOGONY_LIBRARY_CONFIG)
 #define ABYSS_COSMOGONY_LIBRARY_CONFIG
 
+#include <abyss/cosmogony/compiler_support.hh>
+
+__ABYSS_SYSTEM_HEADER()
+
 /* /!\ ACHTUNG /!\ ACHTUNG /!\ ACHTUNG /!\ ACHTUNG /!\ ACHTUNG /!\ */
 /*      THIS IS AN INTERNAL HEADER, DON'T INCLUDE IT DIRECTLY      */
 
