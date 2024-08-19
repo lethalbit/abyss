@@ -1435,6 +1435,21 @@ constexpr bool extent() noexcept {
 
 constexpr bool is_same() noexcept {
 
+	static_assert(std::is_same_v<int, int>);
+	static_assert(std::is_same_v<const int, const int>);
+	static_assert(std::is_same_v<volatile int, volatile int>);
+	static_assert(std::is_same_v<const volatile int, const volatile int>);
+	static_assert(!std::is_same_v<const int, int>);
+	static_assert(!std::is_same_v<volatile int, int>);
+	static_assert(!std::is_same_v<const volatile int, int>);
+
+	static_assert(std::is_same_v<char, char>);
+	static_assert(!std::is_same_v<char, unsigned char>);
+	static_assert(!std::is_same_v<char, signed char>);
+
+	static_assert(std::is_same_v<test::A, test::A>);
+
+
 	return true;
 }
 
