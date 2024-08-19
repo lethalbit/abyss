@@ -1283,6 +1283,18 @@ constexpr bool is_nothrow_move_assignable() noexcept {
 
 constexpr bool is_destructible() noexcept {
 
+	/* BUG(aki): Needs more robust tests */
+	static_assert(std::is_destructible_v<test::A>);
+	static_assert(std::is_destructible_v<int>);
+	static_assert(std::is_destructible_v<const int>);
+	static_assert(std::is_destructible_v<const volatile int>);
+	static_assert(std::is_destructible_v<int&>);
+	static_assert(std::is_destructible_v<const int&>);
+	static_assert(std::is_destructible_v<const volatile int&>);
+	static_assert(!std::is_destructible_v<void>);
+	static_assert(!std::is_destructible_v<void()>);
+	static_assert(!std::is_destructible_v<int[]>);
+
 	return true;
 }
 
