@@ -8,6 +8,25 @@ Abyss is C++ standard library targeting embedded bare-metal applications. As suc
 
 There are also some non-standards compliant enhancements, such as making things `[[nodiscard]]` where they really should be, but were not done so by the standard.
 
+### Documentation / Building
+
+> [!WARNING]
+> There is currently little to no documentation for Abyss, that will change soon once
+> implementation is further along.
+
+### Runtime/ABI Support
+
+Not everything in the C++ standard library can be done without some runtime or ABI support, due to this Abyss is segmented into the fully standalone/freestanding environment and then has several levels of feature flags depending on what is needed. They are as follows:
+
+ * `runtime_components` - Only the most basic runtime stubs and implementation.
+ * `threading_support` - Thread stubs and support.
+ * `rtti_support` - Run-Time Type Identification support
+ * `exception_support` - Support for exceptions
+ * `virtual_support` - Support for virtual classes / `dynamic_cast` etc
+
+When enabled, these will build static libraries for the target platform that contain the runtime components requested, however, due to not being able to implement closer to the metal features for unknown platforms, there will be a collection of needed stubs to be implemented in the freestanding environment to satisfy them.
+
+
 ### Supported Compilers
 
 > [!IMPORTANT]
@@ -50,7 +69,6 @@ There are also some non-standards compliant enhancements, such as making things 
 ### Implementation Status
 
 Abyss is still a very young library, so not much is implemented yet, and everything might not be.
-
 
 <table>
 	<tbody>
