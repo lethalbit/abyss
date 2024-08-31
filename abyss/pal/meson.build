@@ -5,10 +5,13 @@ message('Building Abyss PAL for @0@'.format(host_arch))
 
 pal_srcs = files([])
 
+# TODO(aki): Think about `crt0.o` and other startup object files if we need them?
+
+
 subdir(host_arch)
 
 
-abyss_pal = library(
+abyss_pal = static_library(
 	f'abyss-cxx-pal',
 	pal_srcs,
 	cpp_args: [
