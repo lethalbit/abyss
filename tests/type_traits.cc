@@ -1581,6 +1581,11 @@ constexpr bool add_lvalue_reference() noexcept {
 
 constexpr bool add_rvalue_reference() noexcept {
 
+	static_assert(std::is_same_v<std::add_rvalue_reference_t<int>, int&&>);
+	static_assert(std::is_same_v<std::add_rvalue_reference_t<const int>, const int&&>);
+	static_assert(std::is_same_v<std::add_rvalue_reference_t<volatile int>, volatile int&&>);
+	static_assert(std::is_same_v<std::add_rvalue_reference_t<const volatile int>, const volatile int&&>);
+
 	return true;
 }
 
