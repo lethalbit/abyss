@@ -2,9 +2,6 @@
 
 runtime_basename = 'abyss-cxx-runtime'
 
-host_arch = '@0@-@1@'.format(host_machine.cpu_family(), host_machine.kernel())
-runtime_install_dir = lib_dir / 'abyss' / host_arch
-
 message('Building Abyss runtimes for @0@'.format(host_arch))
 
 generic_runtime_srcs = files([
@@ -52,21 +49,30 @@ abyss_runtime_generic_dep = declare_dependency(
 
 
 
-full_runtime_deps = []
+full_runtime_deps = [
+	abyss_runtime_generic_dep
+]
+
+full_runtime_libs = [
+	abyss_runtime_generic
+]
 
 if threading_enabled.allowed()
 	subdir('threading')
 	full_runtime_deps += [ abyss_runtime_threading_dep ]
+	full_runtime_libs += [ abyss_runtime_threading     ]
 endif
 
 if rtti_enabled.allowed()
 	subdir('rtti')
 	full_runtime_deps += [ abyss_runtime_rtti_dep ]
+	full_runtime_libs += [ abyss_runtime_rtti     ]
 endif
 
 if exceptions_enabled.allowed()
 	subdir('exceptions')
 	full_runtime_deps += [ abyss_runtime_exceptions_dep ]
+	full_runtime_libs += [ abyss_runtime_exceptions     ]
 endif
 
 if not meson.is_subproject()
@@ -75,12 +81,7 @@ if not meson.is_subproject()
 		name: 'abyss-runtime-full',
 		filebase: 'abyss-runtime-full',
 		version: meson.project_version(),
-		libraries: [
-			abyss_runtime_generic,
-			abyss_runtime_exceptions,
-			abyss_runtime_rtti,
-			abyss_runtime_threading,
-		],
+		libraries: full_runtime_libs,
 		install_dir: runtime_install_dir / 'pkgconfig',
 		url: 'https://github.com/lethalbit/abyss',
 		description: 'Deeply Embeddable bare-metal C++ standard library: All runtime components'

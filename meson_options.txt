@@ -55,6 +55,13 @@ option(
 )
 
 option(
+	'platform_library',
+	type: 'feature',
+	value: 'disabled',
+	description: 'Enable the Abyss platform abstraction library for the current build target'
+)
+
+option(
 	'runtime_symlinks',
 	type: 'boolean',
 	value: false,

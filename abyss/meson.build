@@ -101,3 +101,7 @@ stdlib_include = include_directories('.')
 if runtime_enabled.allowed()
 	subdir('runtime')
 endif
+
+if platform_library.allowed()
+	subdir('pal')
+endif

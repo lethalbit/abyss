@@ -74,6 +74,7 @@ add_project_arguments(
 	language: 'cpp'
 )
 
+host_arch = '@0@-@1@'.format(host_machine.cpu_family(), host_machine.kernel())
 
 pkgconfig = import('pkgconfig')
 
@@ -81,11 +82,14 @@ is_windows = (host_machine.system() == 'windows')
 
 build_tests      = get_option('build_tests')
 build_benchmarks = get_option('build_benchmarks')
+build_docs       = get_option('build_docs')
 
 pfx_dir  = get_option('prefix')
 bin_dir  = pfx_dir / get_option('bindir')
 lib_dir  = pfx_dir / get_option('libdir')
 data_dir = pfx_dir / get_option('datadir')
+
+runtime_install_dir = lib_dir / 'abyss' / host_arch
 
 runtime_enabled      = get_option('runtime_components')
 threading_enabled    = get_option('threading_support').disable_if(not runtime_enabled.allowed())
@@ -96,6 +100,8 @@ cxx23_enabled        = get_option('cxx23_supplemental')
 extra_enabled        = get_option('extra')
 runtime_symlinks     = get_option('runtime_symlinks')
 install_only_runtime = get_option('only_runtime').disable_if(not runtime_enabled.allowed()).allowed()
+
+platform_library     = get_option('platform_library').disable_if(not runtime_enabled.allowed()).disable_if(is_windows)
 
 subdir('abyss')
 
