@@ -1,0 +1,5 @@
+sphinx
+furo
+sphinx-inline-tabs
+sphinxext-opengraph
+myst-parser
