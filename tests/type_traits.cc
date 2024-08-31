@@ -1367,6 +1367,11 @@ constexpr bool is_nothrow_destructible() noexcept {
 
 constexpr bool has_virtual_destructor() noexcept {
 
+	static_assert(std::has_virtual_destructor_v<test::N>);
+	static_assert(std::has_virtual_destructor_v<test::O>);
+	static_assert(!std::has_virtual_destructor_v<test::A>);
+	static_assert(!std::has_virtual_destructor_v<test::P>);
+
 	return true;
 }
 
