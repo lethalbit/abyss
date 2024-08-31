@@ -847,6 +847,51 @@ namespace std {
 	template<typename _Ty>
 	using make_unsigned_t = make_unsigned<_Ty>::type;
 
+	namespace _impl {
+		template<typename _Ty>
+		struct _try_make_signed_match : type_identity<_Ty> {};
+		template<>
+		struct _try_make_signed_match<char> : type_identity<signed char> {};
+		template<>
+		struct _try_make_signed_match<unsigned char> : type_identity<signed char> {};
+		template<>
+		struct _try_make_signed_match<unsigned short> : type_identity<short> {};
+		template<>
+		struct _try_make_signed_match<unsigned int> : type_identity<int> {};
+		template<>
+		struct _try_make_signed_match<unsigned long> : type_identity<long> {};
+		template<>
+		struct _try_make_signed_match<unsigned long long> : type_identity<long long> {};
+
+		template<typename _Ty, bool _Int = std::is_integral_v<_Ty>, bool _Enum = std::is_enum_v<_Ty>>
+		struct _try_make_signed;
+		template<typename _Ty>
+		struct _try_make_signed<_Ty, true, false> : _match_cv<_Ty, typename _try_make_signed_match<std::remove_cv_t<_Ty>>::type> {};
+		template<typename _Ty>
+		struct _try_make_signed<_Ty, false, true> :  _match_cv<_Ty, typename _try_make_signed_match<typename _try_make_unsigned<_Ty>::type>::type> {};
+
+		template<>
+		struct _try_make_signed<wchar_t> : _try_make_signed<wchar_t, false, true> {};
+		template<>
+		struct _try_make_signed<char8_t> : _try_make_signed<char8_t, false, true> {};
+	}
+
+	template<typename _Ty>
+	struct make_signed : _impl::_try_make_signed<_Ty> {};
+
+	template<>
+	struct make_signed<bool>;
+	template<>
+	struct make_signed<const bool>;
+	template<>
+	struct make_signed<volatile bool>;
+	template<>
+	struct make_signed<const volatile bool>;
+
+	template<typename _Ty>
+	using make_signed_t = make_signed<_Ty>::type;
+
+
 	template<typename _Ty>
 	struct remove_extent { using type = _Ty; };
 	template<typename _Ty>

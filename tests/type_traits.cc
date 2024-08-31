@@ -1645,6 +1645,24 @@ constexpr bool add_pointer() noexcept {
 
 constexpr bool make_signed() noexcept {
 
+	static_assert(std::is_same_v<std::make_signed_t<char>, signed char>);
+	static_assert(std::is_same_v<std::make_signed_t<unsigned char>, signed char>);
+	static_assert(std::is_same_v<std::make_signed_t<short>, short>);
+	static_assert(std::is_same_v<std::make_signed_t<unsigned short>, short>);
+	static_assert(std::is_same_v<std::make_signed_t<int>, int>);
+	static_assert(std::is_same_v<std::make_signed_t<unsigned int>, int>);
+	static_assert(std::is_same_v<std::make_signed_t<long>, long>);
+	static_assert(std::is_same_v<std::make_signed_t<unsigned long>, long>);
+	static_assert(std::is_same_v<std::make_signed_t<long long>, long long>);
+	static_assert(std::is_same_v<std::make_signed_t<unsigned long long>, long long>);
+
+	static_assert(std::is_same_v<std::make_signed_t<const int>, const int>);
+	static_assert(std::is_same_v<std::make_signed_t<const unsigned int>, const int>);
+	static_assert(std::is_same_v<std::make_signed_t<volatile int>, volatile int>);
+	static_assert(std::is_same_v<std::make_signed_t<volatile unsigned int>, volatile int>);
+	static_assert(std::is_same_v<std::make_signed_t<const volatile int>, const volatile int>);
+	static_assert(std::is_same_v<std::make_signed_t<const volatile unsigned int>, const volatile int>);
+
 	return true;
 }
 
