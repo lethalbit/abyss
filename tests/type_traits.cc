@@ -1659,6 +1659,32 @@ constexpr bool remove_extent() noexcept {
 
 constexpr bool remove_all_extents() noexcept {
 
+	// NOLINTBEGIN(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+
+	static_assert(std::is_same_v<std::remove_all_extents_t<int>, int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<const int>, const int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<volatile int>, volatile int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<const volatile int>, const volatile int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<int[]>, int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<const int[]>, const int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<volatile int[]>, volatile int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<const volatile int[]>, const volatile int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<int[2]>, int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<const int[2]>, const int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<volatile int[2]>, volatile int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<const volatile int[2]>, const volatile int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<int[2][4]>, int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<const int[2][4]>, const int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<volatile int[2][4]>, volatile int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<const volatile int[2][4]>, const volatile int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<int[2][4][8]>, int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<const int[2][4][8]>, const int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<volatile int[2][4][8]>, volatile int>);
+	static_assert(std::is_same_v<std::remove_all_extents_t<const volatile int[2][4][8]>, const volatile int>);
+
+	// NOLINTEND(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+
+
 	return true;
 }
 
