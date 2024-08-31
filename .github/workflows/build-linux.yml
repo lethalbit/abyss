@@ -5,12 +5,16 @@ on:
     paths:
       - 'abyss/**'
       - 'tests/**'
+      - 'meson.build'
+      - 'meson_options.txt'
       - '.github/workflows/build-linux.yml'
   pull_request:
     branches: [ 'main' ]
     paths:
       - 'abyss/**'
       - 'tests/**'
+      - 'meson.build'
+      - 'meson_options.txt'
       - '.github/workflows/build-linux.yml'
 
 
