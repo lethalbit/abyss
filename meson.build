@@ -82,7 +82,6 @@ is_windows = (host_machine.system() == 'windows')
 
 build_tests      = get_option('build_tests')
 build_benchmarks = get_option('build_benchmarks')
-build_docs       = get_option('build_docs')
 
 pfx_dir  = get_option('prefix')
 bin_dir  = pfx_dir / get_option('bindir')
