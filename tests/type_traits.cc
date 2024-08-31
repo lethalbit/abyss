@@ -1605,6 +1605,15 @@ constexpr bool remove_pointer() noexcept {
 
 constexpr bool add_pointer() noexcept {
 
+	static_assert(std::is_same_v<std::add_pointer_t<int>, int*>);
+	static_assert(std::is_same_v<std::add_pointer_t<const int>, const int*>);
+	static_assert(std::is_same_v<std::add_pointer_t<volatile int>, volatile int*>);
+	static_assert(std::is_same_v<std::add_pointer_t<const volatile int>, const volatile int*>);
+	static_assert(std::is_same_v<std::add_pointer_t<int*>, int**>);
+	static_assert(std::is_same_v<std::add_pointer_t<const int*>, const int**>);
+	static_assert(std::is_same_v<std::add_pointer_t<volatile int*>, volatile int**>);
+	static_assert(std::is_same_v<std::add_pointer_t<const volatile int*>, const volatile int**>);
+
 	return true;
 }
 
