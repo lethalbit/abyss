@@ -141,6 +141,24 @@ namespace std {
 	template<typename _Ty>
 	inline constexpr bool is_volatile_v = is_volatile<_Ty>::value;
 
+	namespace _impl {
+		template<typename _Ty, bool _Const, bool _Volatile>
+		struct _try_match_cv;
+
+		template<typename _Ty>
+		struct _try_match_cv<_Ty, false, false> : type_identity<_Ty> {};
+		template<typename _Ty>
+		struct _try_match_cv<_Ty, false, true> : type_identity<volatile _Ty> {};
+		template<typename _Ty>
+		struct _try_match_cv<_Ty, true, false> : type_identity<const _Ty> {};
+		template<typename _Ty>
+		struct _try_match_cv<_Ty, true, true> : type_identity<const volatile _Ty> {};
+
+		template<
+			typename _Ty, typename _Uy, bool _Const = std::is_const_v<_Ty>, bool _Volatile = std::is_volatile_v<_Ty>
+		>
+		struct _match_cv : type_identity<_try_match_cv<_Uy, _Const, _Volatile>::type> {};
+	}
 
 	template<typename _Ty>
 	struct remove_reference { using type = _Ty; };

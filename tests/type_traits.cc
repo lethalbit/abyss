@@ -1562,6 +1562,25 @@ constexpr bool add_volatile() noexcept {
 	return true;
 }
 
+/* NOTE(aki): This is a test of an internal method */
+constexpr bool _match_cv() noexcept {
+
+	static_assert(std::is_same_v<std::_impl::_match_cv<int, int>::type, int>);
+	static_assert(std::is_same_v<std::_impl::_match_cv<int, const int>::type, const int>);
+	static_assert(std::is_same_v<std::_impl::_match_cv<int, volatile int>::type, volatile int>);
+	static_assert(std::is_same_v<std::_impl::_match_cv<int, const volatile int>::type, const volatile int>);
+	static_assert(std::is_same_v<std::_impl::_match_cv<const int, int>::type, const int>);
+	static_assert(std::is_same_v<std::_impl::_match_cv<const int, const int>::type, const int>);
+	static_assert(std::is_same_v<std::_impl::_match_cv<const int, volatile int>::type, const volatile int>);
+	static_assert(std::is_same_v<std::_impl::_match_cv<const int, const volatile int>::type, const volatile int>);
+	static_assert(std::is_same_v<std::_impl::_match_cv<volatile int, int>::type, volatile int>);
+	static_assert(std::is_same_v<std::_impl::_match_cv<volatile int, const int>::type, const volatile int>);
+	static_assert(std::is_same_v<std::_impl::_match_cv<volatile int, const volatile int>::type, const volatile int>);
+	static_assert(std::is_same_v<std::_impl::_match_cv<const volatile int, int>::type, const volatile int>);
+
+	return true;
+}
+
 constexpr bool remove_reference() noexcept {
 
 	static_assert(std::is_same_v<std::remove_reference_t<int&>, int>);
@@ -1974,6 +1993,7 @@ int main(int, char**) {
 		add_cv() &&
 		add_const() &&
 		add_volatile() &&
+		_match_cv() &&
 		remove_reference() &&
 		add_lvalue_reference() &&
 		add_rvalue_reference() &&
