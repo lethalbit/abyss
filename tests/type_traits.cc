@@ -1520,6 +1520,11 @@ constexpr bool remove_const() noexcept {
 
 constexpr bool remove_volatile() noexcept {
 
+	static_assert(std::is_same_v<std::remove_volatile_t<int>, int>);
+	static_assert(std::is_same_v<std::remove_volatile_t<const int>, const int>);
+	static_assert(std::is_same_v<std::remove_volatile_t<volatile int>, int>);
+	static_assert(std::is_same_v<std::remove_volatile_t<const volatile int>, const int>);
+
 	return true;
 }
 
