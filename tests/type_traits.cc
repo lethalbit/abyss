@@ -864,7 +864,12 @@ constexpr bool is_final() noexcept {
 
 constexpr bool is_aggregate() noexcept {
 
-	// TODO(aki): Slightly problematic to test at the moment, oops
+	static_assert(!std::is_aggregate_v<int>);
+	static_assert(!std::is_aggregate_v<test::B>);
+	// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+	static_assert(std::is_aggregate_v<int[]>);
+	static_assert(std::is_aggregate_v<test::A>);
+	static_assert(std::is_aggregate_v<test::M>);
 
 	return true;
 }
