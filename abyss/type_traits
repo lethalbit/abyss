@@ -5,6 +5,7 @@
 
 #include <abyss/cosmogony/fundamental.hh>
 #include <abyss/cosmogony/compiler_support.hh>
+#include <abyss/cosmogony/library_config.hh>
 
 __ABYSS_SYSTEM_HEADER()
 
@@ -159,6 +160,14 @@ namespace std {
 		>
 		struct _match_cv : type_identity<_try_match_cv<_Uy, _Const, _Volatile>::type> {};
 	}
+
+#if defined(ABYSS_EXTRA)
+	template<typename _Ty, typename _Uy>
+	struct copy_cv : _impl::_match_cv<_Ty, _Uy> {};
+
+	template<typename _Ty, typename _Uy>
+	using copy_cv_t = copy_cv<_Ty, _Uy>::type;
+#endif
 
 	template<typename _Ty>
 	struct remove_reference { using type = _Ty; };
