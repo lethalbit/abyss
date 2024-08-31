@@ -227,7 +227,6 @@ namespace test {
 	constexpr bool same_types = std::conjunction_v<std::is_same<T, Ts>...>;
 }
 
-
 constexpr bool is_void() noexcept {
 
 	static_assert(std::is_void_v<void>);
@@ -874,7 +873,6 @@ constexpr bool is_aggregate() noexcept {
 	return true;
 }
 
-
 constexpr bool is_signed() noexcept {
 
 	static_assert(std::is_signed_v<signed char>);
@@ -1057,7 +1055,6 @@ constexpr bool is_unbounded_array() noexcept {
 
 	return true;
 }
-
 
 constexpr bool is_constructible() noexcept {
 
@@ -1694,8 +1691,6 @@ constexpr bool remove_all_extents() noexcept {
 }
 
 constexpr bool aligned_storage() noexcept {
-
-
 
 	return true;
 }
