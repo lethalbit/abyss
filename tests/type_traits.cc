@@ -1780,6 +1780,7 @@ constexpr bool underlying_type() noexcept {
 
 	/* BUG(aki): Needs more robust tests */
 	static_assert(std::is_same_v<std::underlying_type_t<test::B>, int>);
+	static_assert(std::is_same_v<std::underlying_type_t<test::C>, char>);
 
 	return true;
 }
