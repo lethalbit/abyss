@@ -782,9 +782,70 @@ namespace std {
 	/* TODO(aki): is_pointer_interconvertible_base_of */
 	/* TODO(aki): is_{,nothrow_}invocable{,_r} */
 
+	namespace _impl {
+		template<typename _Ty>
+		struct _try_make_unsigned_match : type_identity<_Ty> {};
+		template<>
+		struct _try_make_unsigned_match<char> : type_identity<unsigned char> {};
+		template<>
+		struct _try_make_unsigned_match<signed char> : type_identity<unsigned char> {};
+		template<>
+		struct _try_make_unsigned_match<short> : type_identity<unsigned short> {};
+		template<>
+		struct _try_make_unsigned_match<int> : type_identity<unsigned int> {};
+		template<>
+		struct _try_make_unsigned_match<long> : type_identity<unsigned long> {};
+		template<>
+		struct _try_make_unsigned_match<long long> : type_identity<unsigned long long> {};
 
-	/* TODO(aki): make_signed */
-	/* TODO(aki): make_unsigned */
+		template<typename _Ty, bool _Int = std::is_integral_v<_Ty>, bool _Enum = std::is_enum_v<_Ty>>
+		struct _try_make_unsigned;
+		template<typename _Ty>
+		struct _try_make_unsigned<_Ty, true, false> : _match_cv<_Ty, typename _try_make_unsigned_match<std::remove_cv_t<_Ty>>::type> {};
+
+		template<typename...>
+		struct _size_pack {};
+		template<typename _Ty, typename... _Ts>
+		struct _size_pack<_Ty, _Ts...> : _size_pack<_Ts...> {
+			static constexpr  std::size_t _size = sizeof(_Ty);
+		};
+
+		template<std::size_t _Size, typename _Ty, bool = (_Size <= _Ty::_size)>
+		struct _size_filter;
+		template<std::size_t _Size, typename _Ty, typename... _Ts>
+		struct _size_filter<_Size, _size_pack<_Ty, _Ts...>, true> : std::type_identity<_Ty> {};
+		template<std::size_t _Size, typename _Ty, typename... _Ts>
+		struct _size_filter<_Size, _size_pack<_Ty, _Ts...>, false> :  _size_filter<_Size, _size_pack<_Ts...>>   {};
+
+
+		template<typename _Ty>
+		struct _try_make_unsigned<_Ty, false, true> :
+			_match_cv<_Ty, typename _try_make_unsigned_match<
+				typename _size_filter<sizeof(_Ty), _size_pack<
+					unsigned char, unsigned short, unsigned int, unsigned long, unsigned long long
+				>>::type
+			>::type>
+		{};
+		template<>
+		struct _try_make_unsigned<wchar_t> : _try_make_unsigned<wchar_t, false, true> {};
+		template<>
+		struct _try_make_unsigned<char8_t> : _try_make_unsigned<char8_t, false, true> {};
+	}
+
+	template<typename _Ty>
+	struct make_unsigned : _impl::_try_make_unsigned<_Ty> {};
+
+	template<>
+	struct make_unsigned<bool>;
+	template<>
+	struct make_unsigned<const bool>;
+	template<>
+	struct make_unsigned<volatile bool>;
+	template<>
+	struct make_unsigned<const volatile bool>;
+
+	template<typename _Ty>
+	using make_unsigned_t = make_unsigned<_Ty>::type;
 
 	template<typename _Ty>
 	struct remove_extent { using type = _Ty; };
