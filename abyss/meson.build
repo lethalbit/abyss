@@ -15,7 +15,7 @@ abyss_headers = files([
 ])
 
 abyss_headers_runtime = files([
-
+	'cinttypes',
 ])
 
 abyss_headers_runtime_threads = files([
