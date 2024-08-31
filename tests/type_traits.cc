@@ -1548,6 +1548,10 @@ constexpr bool add_const() noexcept {
 
 constexpr bool add_volatile() noexcept {
 
+	static_assert(std::is_same_v<std::add_volatile_t<int>, volatile int>);
+	static_assert(std::is_same_v<std::add_volatile_t<const int>, const volatile int>);
+	static_assert(std::is_same_v<std::add_volatile_t<volatile int>, volatile int>);
+
 	return true;
 }
 
