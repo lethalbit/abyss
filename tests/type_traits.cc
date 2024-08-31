@@ -1530,6 +1530,10 @@ constexpr bool remove_volatile() noexcept {
 
 constexpr bool add_cv() noexcept {
 
+	static_assert(std::is_same_v<std::add_cv_t<int>, const volatile int>);
+	static_assert(std::is_same_v<std::add_cv_t<const int>, const volatile int>);
+	static_assert(std::is_same_v<std::add_cv_t<volatile int>, const volatile int>);
+
 	return true;
 }
 
