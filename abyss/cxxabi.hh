@@ -20,8 +20,8 @@
 		this may change in the future.
 */
 
-#include <cstddef>
-#include <cstdint>
+#include <abyss/cstddef>
+#include <abyss/cstdint>
 
 
 namespace __cxxabiv1 {
