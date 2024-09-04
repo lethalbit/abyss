@@ -23,6 +23,7 @@
 #if !defined(__ABYSS_DEBUG_FALLBACK_IMPLS)
 #	define __ABYSS_DEBUG_FALLBACK_IMPLS 0
 #endif
+/* TODO(aki): The `__has_builtin` should be checked for, but, eh, not worth it? */
 #define __ABYSS_HAS_BUILTIN(b) (!__ABYSS_DEBUG_FALLBACK_IMPLS && __has_builtin(b))
 
 /* Allows us to defined pragmas via a macro */
@@ -31,6 +32,12 @@
 #	define __ABYSS_PRAGMA(p) __ABYSS_PRAGMA_(p)
 #else
 # 	define __ABYSS_PRAGMA(p)
+#endif
+
+#if defined(__has_feature)
+#	define __ABYSS_HAS_FEATURE(feat) __has_feature(feat)
+#else
+#	define __ABYSS_HAS_FEATURE(feat) 0
 #endif
 
 #if defined(__GNUG__) && !defined(__clang__)
