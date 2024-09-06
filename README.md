@@ -26,6 +26,12 @@ Not everything in the C++ standard library can be done without some runtime or A
 
 When enabled, these will build static libraries for the target platform that contain the runtime components requested, however, due to not being able to implement closer to the metal features for unknown platforms, there will be a collection of needed stubs to be implemented in the freestanding environment to satisfy them.
 
+> [!DANGER]
+> The abyss ABI, while mostly compliant with the [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html) we do not guarantee ABI stability to the extent of
+> [libstdc++](https://gcc.gnu.org/onlinedocs/libstdc++/manual/abi.html) or [libc++](https://libcxx.llvm.org/) would
+> Nor are we ABI compatible with said C++ libraries, therefore intermixing code linked with
+> `libstdc++`, `libc++`, or other versions of Abyss is highly advised against.
+
 
 ### Supported Compilers
 
