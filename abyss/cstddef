@@ -29,7 +29,7 @@ namespace std {
 		long double _max_align_ld;
 	};
 
-	enum class byte : unsigned char {};
+	enum class [[gnu::may_alias]] byte : unsigned char {};
 
 	/* NOTE(aki): Due to us not being able to drag in <type_traits> we need to do this */
 	/*            It's kinda an implementation of `is_integral` and `remove_cv`        */
