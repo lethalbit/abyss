@@ -245,7 +245,7 @@ namespace std {
 #if defined(__INT8_TYPE__)
 	using int8_t = __INT8_TYPE__;
 #else
-	using int8_t = signed char
+	using int8_t = signed char;
 #endif
 #if defined(__INT16_TYPE__)
 	using int16_t = __INT16_TYPE__;
