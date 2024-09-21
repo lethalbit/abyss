@@ -96,8 +96,6 @@ endif
 
 subdir('cosmogony')
 
-stdlib_include = include_directories('.')
-
 if runtime_enabled.allowed()
 	subdir('runtime')
 endif

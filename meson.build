@@ -102,9 +102,9 @@ install_only_runtime = get_option('only_runtime').disable_if(not runtime_enabled
 
 platform_library     = get_option('platform_library').disable_if(not runtime_enabled.allowed()).disable_if(is_windows)
 
-subdir('abyss')
+stdlib_include = include_directories('.')
 
-_lib_include = include_directories('.')
+subdir('abyss')
 
 if build_tests
 	subdir('tests')

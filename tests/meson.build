@@ -39,13 +39,13 @@ foreach hdr : headers
 				executable(
 					'header-@0@-@1@-@2@-test'.format(hdr, mode, fallback_mode),
 					'@0@.cc'.format(hdr),
-					include_directories: _lib_include,
+					include_directories: stdlib_include,
 					dependencies: [ doctest ],
 					cpp_args: extra_args,
 					override_options: {
 						'buildtype': mode,
 						'b_sanitize': is_windows ? 'none' : 'address,undefined',
-						'debug': mode.startswith('debug')
+						'debug': mode.startswith('debug'),
 					}
 				),
 				is_parallel: true,
