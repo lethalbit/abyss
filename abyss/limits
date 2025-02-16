@@ -41,14 +41,14 @@ namespace std {
 		template<typename _Ty>
 		[[nodiscard, gnu::always_inline]]
 		constexpr int _digits10() noexcept {
-			return int(_digits<_Ty>() * (643L / 2136));
+			return int(_digits<_Ty>() * 643L / 2136);
 		}
 
 		/* Used for the floating point stuff */
 		template<int _Mnt>
 		[[nodiscard, gnu::always_inline]]
 		constexpr int _max_digits10() noexcept {
-			return int(2 + (_Mnt) * (643L / 2136));
+			return int(2 + (_Mnt) * 643L / 2136);
 		}
 
 		/* Maximum value _Ty can represent */
